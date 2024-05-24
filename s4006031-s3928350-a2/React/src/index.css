@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.image-container {
+  position: relative;
+  width: 100%; /* Ensure the container takes full width */
+}
+
+.title {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white; /* Optional: Set text color */
+  text-align: center; /* Optional: Center align text */
+  z-index: 1; /* Set z-index to place it in front of the image */
+  font-size: 60px; /* Adjust the font size as needed */
+}
+
+.description {
+  position: absolute;
+  top: 17%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white; /* Optional: Set text color */
+  text-align: center; /* Optional: Center align text */
+  z-index: 1; /* Set z-index to place it in front of the image */
+}
+
+
+
+
+
+
+.signin-background {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%; 
+  max-width: 25rem; 
+  min-height: 25rem; 
+  padding: 10%; 
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  z-index: -1;
+}
+
+.signin-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+}
+
+.signin-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%; 
+  max-width: 300px; 
+  margin: 0 auto; 
+
+}
+
+.signin-input,
+.signin-button {
+  width: 100%; 
+  padding: 1rem;
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}
+
+.signin-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+}
+
+.signin-button:hover {
+  background-color: #0056b3;
+}
+
+.error-message {
+  color: red;
+}
+
+.loggedin-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f0f0;
+}
+
+.loggedin-message {
+  text-align: center;
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.loggedin-message button {
+  margin-top: 1rem;
+  padding: 1rem 2rem;
+  background-color: #269faf;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.loggedin-message button:hover {
+  background-color: #1c7a89;
+}
+
+
+
+/*Vegetable Tips*/
+.vegetable-tips-container {
+  position: relative;
+  color: white;
+}
+
+.background-image {
+  width: 100%;
+  /* Remove or adjust the opacity as needed */
+}
+
+.tips-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 8px; /* Adjust padding as needed */
+}
+
+/* Additional styling for list items */
+.vegetable-tips-container ul li {
+  background-color: #52ac48; /* This is the green color from your original code */
+  margin: 0.5em 0;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  text-align: left; /* Align text to the left */
+}
