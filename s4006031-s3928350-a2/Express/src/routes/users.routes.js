@@ -11,8 +11,14 @@ module.exports = (express, app) => {
   // Select one user from the database if username and password are a match.
   router.post("/login", controller.login);
 
+  router.post("/logout", controller.login);
+
   // Create a new user.
   router.post("/", controller.createUser);
+
+  router.put("/:id", controller.updateUser);
+
+  router.delete("/:id", controller.deleteUser);
 
   // Add routes to server.
   app.use("/api/users", router);

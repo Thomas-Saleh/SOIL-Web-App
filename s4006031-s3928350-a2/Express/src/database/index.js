@@ -21,15 +21,12 @@ const db = {};
 
 // Import models
 db.user = require('./models/users')(sequelize, DataTypes);
-db.isLoggedIn = require('./models/isLoggedIn')(sequelize, DataTypes);
 db.product = require('./models/products')(sequelize, DataTypes);
 db.review = require('./models/reviews')(sequelize, DataTypes);
 db.cart = require('./models/cart')(sequelize, DataTypes);
 db.follow = require('./models/follows')(sequelize, DataTypes);
 
 // Set up associations
-db.user.hasMany(db.isLoggedIn, { foreignKey: 'user_id' });
-db.isLoggedIn.belongsTo(db.user, { foreignKey: 'user_id' });
 
 db.user.hasMany(db.review, { foreignKey: 'user_id' });
 db.review.belongsTo(db.user, { foreignKey: 'user_id' });

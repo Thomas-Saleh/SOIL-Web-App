@@ -19,6 +19,10 @@ module.exports = (sequelize, DataTypes) =>
         type: DataTypes.STRING(255),
         allowNull: false
       },
+      isLoggedIn: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+      },
       age: {
         type: DataTypes.INTEGER
       },
@@ -37,14 +41,15 @@ module.exports = (sequelize, DataTypes) =>
       health_goals: {
         type: DataTypes.TEXT
       },
-      created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
-      },
-      updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
-      }
+      // created_at: {
+      //   type: DataTypes.DATE,
+      //   defaultValue: DataTypes.NOW
+      // },
+      // updated_at: {
+      //   type: DataTypes.DATE,
+      //   defaultValue: DataTypes.NOW
+      // }
     }, {
-      timestamps: true
+      // timestamps: true
+      timestamps: false
     });
