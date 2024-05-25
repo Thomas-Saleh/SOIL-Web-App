@@ -17,7 +17,6 @@ app.get('/', (req, res) => {
 
 // Import and use user routes
 require('./src/routes/users.routes')(express, app);
-require('./src/routes/isLoggedIn.routes')(express, app);
 require('./src/routes/products.routes')(express, app);
 require('./src/routes/reviews.routes')(express, app);
 require('./src/routes/cart.routes')(express, app);

@@ -2,7 +2,7 @@ import axios from "axios";
 
 // --- Constants ----------------------------------------------------------------------------------
 const API_HOST = "http://localhost:3000";
-const USER_KEY = "user";
+const USER_KEY = "users";
 
 // --- User ---------------------------------------------------------------------------------------
 async function verifyUser(email, password) {
@@ -46,5 +46,5 @@ function removeUser() {
 
 export {
   verifyUser, findUser, createUser,
-  getUser, removeUser
+  setUser, getUser, removeUser
 };
