@@ -222,14 +222,23 @@ function Profile() {
   useEffect(() => {
     const sessionToken = localStorage.getItem('sessionToken');
     if (sessionToken) {
-      fetchUserDetails();
+        fetchUserDetails();
     }
   }, []);
 
 
   const fetchUserDetails = async () => {
     try {
-      const user = await findUser('14'); // Call the API to get user details
+      // Retrieve the user object from localStorage
+      const userString = localStorage.getItem('users');
+      if (!userString) {
+        throw new Error("No user found in localStorage");
+      }
+
+      // Parse the user object
+      const userObject = JSON.parse(userString);
+      const userId = userObject.id;
+      const user = await findUser(userId);
       if (user && user.email) {
         console.log("Set user details", user)
         setUserDetails(user);
@@ -370,7 +379,7 @@ function Profile() {
             <p className="text-lg mb-2"><strong>Height:</strong> {userDetails.height} cm</p>
             <p className="text-lg mb-2"><strong>Activity Levels:</strong> {userDetails.activity_level}</p>
             <p className="text-lg mb-2"><strong>Dietary Preferences:</strong> {userDetails.dietary_preferences}</p>
-            <p className="text-lg mb-2"><strong>Health Goals:</strong> {userDetails.healthGoals}</p>
+            <p className="text-lg mb-2"><strong>Health Goals:</strong> {userDetails.health_goals}</p>
             <div className="btn-group flex justify-around mt-4">
               <button onClick={handleEdit} className="btn-primary">Edit</button>
               <button onClick={handleDelete} className="btn-secondary">Delete Account</button>
