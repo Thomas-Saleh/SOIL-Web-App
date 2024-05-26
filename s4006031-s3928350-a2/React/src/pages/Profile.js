@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { findUser,getUser, updateUser, deleteUser } from '../data/repository'; // Import the necessary functions
 
 const activityLevels = ['light', 'moderate', 'active', 'very_active'];
+const dietaryPreferences = ['vegan', 'vegetarian', 'pescatarian', 'dairy free', 'carnivore diet'];
+const healthGoals = ['weight loss', 'muscle gain', 'maintenance', 'sleep 7 to 9 hours', 'eat nutritiously'];
+
 
 function Profile() {
   const [userDetails, setUserDetails] = useState(null);
@@ -53,7 +56,7 @@ function Profile() {
 
   const handleEdit = () => {
     setIsEditing(true);
-    setEditedUser({ ...userDetails });
+    setEditedUser({ ...userDetails, password: ''  });
   };
 
   const handleChange = (e) => {
@@ -126,38 +129,54 @@ function Profile() {
           <div>
             <div className="flex flex-col space-y-2">
               <label className="block text-sm font-bold mb-2 text-gray-1000">Name:</label>
-              <input type="text" name="name" value={editedUser.name} onChange={handleChange} className="input-field" />
+              <input type="text" name="name" value={editedUser.username} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" />
 
               <label className="block text-sm font-bold mb-2 text-gray-1000">Email:</label>
-              <input type="email" name="email" value={editedUser.email} onChange={handleChange} className="input-field" />
+              <input type="email" name="email" value={editedUser.email} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" />
 
-              <label className="block text-sm font-bold mb-2 text-gray-1000">Password:</label>
-              <input type="password" name="password" value={editedUser.password} onChange={handleChange} className="input-field" />
+              <label className="block text-sm font-bold mb-2 text-gray-1000">New Password:</label>
+              <input type="password" name="password" value={editedUser.password || ''} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" />
 
-              <label className="block text-sm font-bold mb-2 text-gray-1000">Confirm Password:</label>
-              <input type="password" name="confirmPassword" value={confirmPassword} onChange={handleConfirmPasswordChange} className="input-field" />
+              {editedUser.password && (
+                <>
+                  <label className="block text-sm font-bold mb-2 text-gray-1000">Confirm Password:</label>
+                  <input type="password" name="confirmPassword" value={confirmPassword} onChange={handleConfirmPasswordChange} className="input-field border border-gray-300 rounded px-3 py-2" />
+                </>
+              )}
 
               <label className="block text-sm font-bold mb-2 text-gray-1000">Age:</label>
-              <input type="number" name="age" value={editedUser.age} onChange={handleChange} className="input-field" />
+              <input type="number" name="age" value={editedUser.age} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" />
 
               <label className="block text-sm font-bold mb-2 text-gray-1000">Weight:</label>
-              <input type="number" name="weight" value={editedUser.weight} onChange={handleChange} className="input-field" />
+              <input type="number" name="weight" value={editedUser.weight} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" />
 
               <label className="block text-sm font-bold mb-2 text-gray-1000">Height:</label>
-              <input type="number" name="height" value={editedUser.height} onChange={handleChange} className="input-field" />
+              <input type="number" name="height" value={editedUser.height} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" />
 
               <label className="block text-sm font-bold mb-2 text-gray-1000">Activity Level:</label>
-              <select name="activity_level" value={editedUser.activity_level} onChange={handleChange} className="input-field">
+              <select name="activity_level" value={editedUser.activity_level || ''} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" >
+                <option value="" disabled>Select your activity level</option>
                 {activityLevels.map(level => (
                   <option key={level} value={level}>{level}</option>
                 ))}
               </select>
 
               <label className="block text-sm font-bold mb-2 text-gray-1000">Dietary Preferences:</label>
-              <input type="text" name="dietaryPreferences" value={editedUser.dietaryPreferences} onChange={handleChange} className="input-field" />
+              <select name="dietary_preferences" value={editedUser.dietary_preferences || ''} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" >
+                <option value="" disabled>Select your dietary preference</option>
+                {dietaryPreferences.map(preference => (
+                  <option key={preference} value={preference}>{preference}</option>
+                ))}
+              </select>
 
               <label className="block text-sm font-bold mb-2 text-gray-1000">Health Goals:</label>
-              <input type="text" name="healthGoals" value={editedUser.healthGoals} onChange={handleChange} className="input-field" />
+              <select name="health_goals" value={editedUser.health_goals || ''} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" >
+                <option value="" disabled>Select your health goal</option>
+                {healthGoals.map(goal => (
+                  <option key={goal} value={goal}>{goal}</option>
+                ))}
+              </select>
+              
             </div>
             <div className="flex justify-around mt-4">
               <button onClick={handleSave} className="btn-primary">Save</button>

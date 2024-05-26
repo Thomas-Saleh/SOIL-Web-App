@@ -33,13 +33,13 @@ module.exports = (sequelize, DataTypes) =>
         type: DataTypes.DECIMAL(5, 2)
       },
       activity_level: {
-        type: DataTypes.ENUM('light', 'moderate', 'active', 'very_active')
+        type: DataTypes.ENUM('light', 'moderate', 'active', 'very active')
       },
       dietary_preferences: {
-        type: DataTypes.TEXT
+        type: DataTypes.ENUM('vegan', 'vegetarian', 'pescatarian', 'dairy free', 'carnivore diet')
       },
       health_goals: {
-        type: DataTypes.TEXT
+        type: DataTypes.ENUM('weight loss', 'muscle gain', 'maintenance', 'sleep 7 to 9 hours', 'eat nutritiously')
       },
       created_at: {
         type: DataTypes.DATE,
