@@ -65,7 +65,6 @@ exports.createUser = async (req, res) => {
 
 
 // Update a user in the database.
-// Update a user in the database.
 exports.updateUser = async (req, res) => {
   try {
     const user = await db.user.findByPk(req.params.id);

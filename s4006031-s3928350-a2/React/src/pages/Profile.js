@@ -276,7 +276,7 @@ function Profile() {
 
   const handleSave = async () => {
     if (editedUser.password && editedUser.password !== confirmPassword) {
-      alert("");
+      alert("Passwords do not match");
       return;
     }
 
