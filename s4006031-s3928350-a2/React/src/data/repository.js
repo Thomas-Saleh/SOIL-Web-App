@@ -7,11 +7,7 @@ const USER_KEY = "users";
 // --- User ---------------------------------------------------------------------------------------
 async function verifyUser(email, password) {
   const response = await axios.post(API_HOST + "/api/users/login", { email, password });
-  const user = response.data;
-  
-  if (user) setUser(user);
-
-  return user;
+  return response.data;
 }
 
 async function findUser(id) {
