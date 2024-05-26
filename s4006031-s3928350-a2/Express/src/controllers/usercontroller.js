@@ -54,6 +54,7 @@ exports.createUser = async (req, res) => {
     username: req.body.username,
     email: req.body.email,
     password: hash,
+    created_at: new Date()
   });
   res.status(201).json(user);
 } catch (error) {
@@ -64,15 +65,33 @@ exports.createUser = async (req, res) => {
 
 
 // Update a user in the database.
+// Update a user in the database.
 exports.updateUser = async (req, res) => {
-  const user = await db.user.findByPk(req.params.id);
-  if (user) {
-    await user.update(req.body);
-    res.json(user);
-  } else {
-    res.status(404).json({ error: "User not found" });
+  try {
+    const user = await db.user.findByPk(req.params.id);
+    if (user) {
+      const updatedFields = {
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password ? await argon2.hash(req.body.password, { type: argon2.argon2id }) : user.password,
+        age: req.body.age,
+        height: req.body.height,
+        weight: req.body.weight,
+        activity_level: req.body.activity_level,
+        dietary_preferences: req.body.dietary_preferences,
+        health_goals: req.body.health_goals,
+      };
+      await user.update(updatedFields);
+      res.json(user);
+    } else {
+      res.status(404).json({ error: "User not found" });
+    }
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ message: error.message || 'Internal server error' });
   }
 };
+
 
 // Delete a user from the database.
 exports.deleteUser = async (req, res) => {

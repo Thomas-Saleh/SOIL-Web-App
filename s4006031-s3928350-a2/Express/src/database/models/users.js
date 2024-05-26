@@ -41,15 +41,14 @@ module.exports = (sequelize, DataTypes) =>
       health_goals: {
         type: DataTypes.TEXT
       },
-      // created_at: {
-      //   type: DataTypes.DATE,
-      //   defaultValue: DataTypes.NOW
-      // },
-      // updated_at: {
-      //   type: DataTypes.DATE,
-      //   defaultValue: DataTypes.NOW
-      // }
+      created_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW
+      }
     }, {
-      // timestamps: true
       timestamps: false
     });
