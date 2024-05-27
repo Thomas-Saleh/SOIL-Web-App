@@ -41,6 +41,17 @@ async function createProduct(product) {
   return response.data;
 }
 
+// --- Special Deals ------------------------------------------------------------------------------
+async function getSpecialDeals() {
+  const response = await axios.get(API_HOST + "/api/products/special-deals");
+  return response.data;
+}
+
+async function setSpecialDeals(specialDeals) {
+  const response = await axios.post(API_HOST + "/api/products/special-deals", { specialDeals });
+  return response.data;
+}
+
 // --- Helper functions to interact with local storage --------------------------------------------
 function setUser(user) {
   localStorage.setItem(USER_KEY, JSON.stringify(user));
@@ -64,5 +75,5 @@ function removeUser() {
 export {
   verifyUser, findUser, createUser, updateUser,
   setUser, getUser, removeUser, deleteUser, 
-  getAllProducts, createProduct
+  getAllProducts, createProduct, getSpecialDeals, setSpecialDeals
 };

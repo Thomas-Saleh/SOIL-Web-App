@@ -1,38 +1,63 @@
 import React, { useState, useEffect } from 'react';
+import { getSpecialDeals, setSpecialDeals } from "../data/repository";
+import axios from 'axios';
 
-
-function SpecialDeals () {
-  // State to hold the randomly selected product
+function SpecialDeals() {
   const [randomProducts, setRandomProducts] = useState([]);
-  const discountRate = 0.4; // 20% discount
+  const discountRate = 0.4; // 40% discount
   const numOfSpecials = 5;
-
+  const [quantities, setQuantities] = useState({});
 
   useEffect(() => {
-    // Retrieve vegetables from localStorage
-    const storedVegetables = localStorage.getItem('vegetables');
-    const vegetables = storedVegetables ? JSON.parse(storedVegetables) : [];
-    
-    // Shuffle the vegetables array sourced from ChatGPT asked how to randomly select items from an array
-    const shuffledVegetables = vegetables.sort(() => Math.random() - 0.5);
+    async function fetchSpecialDeals() {
+      try {
+        console.log("Fetching special deals...");
+        let specialDeals = await getSpecialDeals();
+        console.log("Fetched special deals:", specialDeals);
 
-    // Select the first numOfSpecials vegetables
-    const selectedVegetables = shuffledVegetables.slice(0, numOfSpecials).map(vegetable => {
-      // Apply discount to the price
-      const discountedPrice = vegetable.price * (1 - discountRate);
-      return { ...vegetable, price: discountedPrice };
-    });
-    
-    // Store the selected special deal products in localStorage
-    localStorage.setItem('specialDeals', JSON.stringify(selectedVegetables));
+        // Check if specialDeals is null or undefined
+        if (!specialDeals) {
+          console.error("Special deals data is null or undefined");
+          specialDeals = [];
+        }
 
-    setRandomProducts(selectedVegetables);
+        if (specialDeals.length === 0) {
+          console.log("No special deals found, fetching all products...");
+          // Fetch all products
+          const response = await axios.get('http://localhost:3000/api/products');
+          const products = response.data;
+          console.log("Fetched products:", products);
+
+          // Shuffle the products array
+          const shuffledProducts = products.sort(() => Math.random() - 0.5);
+          console.log("Shuffled products:", shuffledProducts);
+
+          // Select the first numOfSpecials products and apply discount
+          specialDeals = shuffledProducts.slice(0, numOfSpecials).map(product => {
+            const discountedPrice = product.price * (1 - discountRate);
+            return { ...product, price: discountedPrice };
+          });
+          console.log("Special deals with discounts applied:", specialDeals);
+
+          // Use the discounted products directly instead of refetching
+          setRandomProducts(specialDeals);
+
+          // Optional: You can still call setSpecialDeals to save them to the database for future use
+          console.log("Saving special deals to the database...");
+          await setSpecialDeals(specialDeals);
+          console.log("Special deals saved to the database.");
+        } else {
+          setRandomProducts(specialDeals);
+          console.log("Setting special deals from database:", specialDeals);
+        }
+      } catch (error) {
+        console.error("Failed to fetch special deals:", error);
+      }
+    }
+
+    fetchSpecialDeals();
   }, []);
 
-  const [quantities, setQuantities] = useState({});
-  
-  
-  // Function to handle quantity change of a product
   const handleQuantityChange = (productName, quantity) => {
     setQuantities(prevState => ({
       ...prevState,
@@ -40,7 +65,6 @@ function SpecialDeals () {
     }));
   };
 
-  // Function to add a product to the cart
   const addToCart = (product) => {
     const sessionToken = localStorage.getItem('sessionToken');
     if (!sessionToken) {
@@ -63,32 +87,35 @@ function SpecialDeals () {
 
   return (
     <div>
-    <div className="bg-green-500 text-white py-4">
+      <div className="bg-green-500 text-white py-4">
         <h1 className="text-3xl font-semibold text-center">Special Deals</h1>
-      </div>      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 justify-center">
-        {/* Display the shuffled and selected vegetables with discounted prices */}
-        {randomProducts.map((product) => (
-          <div key={product.id} className="bg-gray-200 p-4 flex flex-col items-center justify-between">
-            <img src={product.imageUrl} alt={product.name} className="w-32 h-32 rounded-full" />
-            <div className="text-center">
-              <h2 className="text-lg font-semibold">{product.name}</h2>
-              <p className="text-sm text-red-500">Special Price: ${product.price.toFixed(2)}</p>
-              <input
-                type="number"
-                min="1"
-                value={quantities[product.name] || ''}
-                onChange={(e) => handleQuantityChange(product.name, parseInt(e.target.value))}
-                className="mt-2 w-16 text-center border border-gray-300 rounded"
-              />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 justify-center">
+        {randomProducts.length === 0 ? (
+          <p className="text-center">No special deals available at the moment.</p>
+        ) : (
+          randomProducts.map((product) => (
+            <div key={product.id} className="bg-gray-200 p-4 flex flex-col items-center justify-between">
+              <img src={product.imageUrl} alt={product.name} className="w-32 h-32 rounded-full" />
+              <div className="text-center">
+                <h2 className="text-lg font-semibold">{product.name}</h2>
+                <p className="text-sm text-red-500">Special Price: ${Number(product.price).toFixed(2)}</p>
+                <input
+                  type="number"
+                  min="1"
+                  value={quantities[product.name] || ''}
+                  onChange={(e) => handleQuantityChange(product.name, parseInt(e.target.value))}
+                  className="mt-2 w-16 text-center border border-gray-300 rounded"
+                />
+              </div>
+              <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={() => addToCart(product)}>
+                Add to Cart
+              </button>
             </div>
-            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={() => addToCart(product)}>
-            Add to Cart
-            </button>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
-    
   );
 }
 

@@ -47,6 +47,35 @@ exports.getAllProducts = async (req, res) => {
   }
 };
 
+exports.getSpecialDeals = async (req, res) => {
+  try {
+    const specialDeals = await db.specialDeal.findAll();
+    res.json(specialDeals || []); // Return an empty array if no special deals are found
+  } catch (error) {
+    console.error("Error fetching special deals:", error);
+    res.status(500).json({ error: "Failed to fetch special deals" });
+  }
+};
+
+exports.setSpecialDeals = async (req, res) => {
+  try {
+    const { specialDeals } = req.body;
+    console.log("Received special deals to set:", specialDeals);
+
+    await db.specialDeal.destroy({ where: {} });
+    console.log("Existing special deals cleared.");
+
+    await db.specialDeal.bulkCreate(specialDeals);
+    console.log("Special deals successfully stored in database:", specialDeals);
+
+    res.json({ message: "Special deals updated!" });
+  } catch (error) {
+    console.error("Error setting special deals:", error);
+    res.status(500).json({ error: "Failed to set special deals", details: error.message });
+  }
+};
+
+
 // Get a single product by ID from the database.
 exports.getProductById = async (req, res) => {
   const product = await db.product.findByPk(req.params.id);

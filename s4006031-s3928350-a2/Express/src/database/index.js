@@ -22,6 +22,7 @@ const db = {};
 // Import models
 db.user = require('./models/users')(sequelize, DataTypes);
 db.product = require('./models/products')(sequelize, DataTypes);
+db.specialDeal = require('./models/specialDeals')(sequelize, DataTypes); 
 db.review = require('./models/reviews')(sequelize, DataTypes);
 db.cart = require('./models/cart')(sequelize, DataTypes);
 db.follow = require('./models/follows')(sequelize, DataTypes);

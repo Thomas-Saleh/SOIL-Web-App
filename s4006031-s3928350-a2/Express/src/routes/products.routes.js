@@ -20,6 +20,12 @@ module.exports = (express, app) => {
   // Populate the database with initial data.
   router.post("/populate", controller.populateDatabase);
 
+  // Get special deals
+  router.get("/special-deals", controller.getSpecialDeals);
+
+  // Set special deals
+  router.post("/special-deals", controller.setSpecialDeals);
+
   // Add routes to server.
   app.use("/api/products", router);
 };
