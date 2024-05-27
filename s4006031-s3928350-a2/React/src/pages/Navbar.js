@@ -19,9 +19,6 @@ function Navbar() {
         <li>
           <Link to="/special-deals" className="hover:text-yellow-300" style={{ color: 'red' }}>Sale</Link>
         </li>
-        <li>
-          <Link to="/vegetable-tips" className="hover:text-yellow-300" >Tips</Link>
-        </li>
       </ul>
       <ul className="flex space-x-4">
         <li>

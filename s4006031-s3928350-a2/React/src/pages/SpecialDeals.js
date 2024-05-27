@@ -95,7 +95,7 @@ function SpecialDeals() {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 justify-center">
         {randomProducts.length === 0 ? (
-          <p className="text-center">No special deals available at the moment.</p>
+          <p className="text-center">Loading ... </p>
         ) : (
           randomProducts.map((product) => (
             <div key={product.id} className="bg-gray-200 p-4 flex flex-col items-center justify-between">

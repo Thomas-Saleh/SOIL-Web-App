@@ -8,7 +8,6 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Profile from './pages/Profile';
 import Product from './pages/Product';
-import VegetableTips from './pages/VegetableTips';
 import DietPlan from './pages/DietPlan';
 // unable to source the error however everything still works perfectly fine
 import Cart from './pages/Cart';
@@ -26,7 +25,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/product" element={<Product />} />
-            <Route path ="/vegetable-tips" element ={<VegetableTips />} />
             <Route path="/special-deals" element={<SpecialDeals />} />
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
