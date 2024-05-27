@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const db = require('./src/database'); // Ensure this path is correct
+const { populateDatabase } = require('./src/controllers/productController');
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,7 +25,10 @@ require('./src/routes/cart.routes')(express, app);
 require('./src/routes/follows.routes')(express, app);
 
 // Database synchronization and server start
-db.sequelize.sync().then(() => {
+db.sequelize.sync().then(async () => {
+  // Automatically populate the database
+  await populateDatabase();
+
   app.listen(PORT, () => {
     console.log(`App running on port ${PORT}`);
   });

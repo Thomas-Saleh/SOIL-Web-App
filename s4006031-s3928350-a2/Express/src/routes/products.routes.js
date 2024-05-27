@@ -17,6 +17,9 @@ module.exports = (express, app) => {
   // Delete a product.
   router.delete("/:id", controller.deleteProduct);
 
+  // Populate the database with initial data.
+  router.post("/populate", controller.populateDatabase);
+
   // Add routes to server.
   app.use("/api/products", router);
 };

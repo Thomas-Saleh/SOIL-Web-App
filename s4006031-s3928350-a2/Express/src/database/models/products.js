@@ -23,14 +23,10 @@ module.exports = (sequelize, DataTypes) =>
       specialPrice: {
         type: DataTypes.DECIMAL(10, 2)
       },
-      created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
-      },
-      updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
+      imageUrl: {
+        type: DataTypes.STRING,
+        allowNull: true
       }
     }, {
-      timestamps: true
+      timestamps: false
     });

@@ -30,6 +30,17 @@ async function deleteUser(userId) {
   return response.data;
 }
 
+// --- Products ---------------------------------------------------------------------------------------
+async function getAllProducts() {
+  const response = await axios.get(API_HOST + "/api/products");
+  return response.data;
+}
+
+async function createProduct(product) {
+  const response = await axios.post(API_HOST + "/api/products", product);
+  return response.data;
+}
+
 // --- Helper functions to interact with local storage --------------------------------------------
 function setUser(user) {
   localStorage.setItem(USER_KEY, JSON.stringify(user));
@@ -52,5 +63,6 @@ function removeUser() {
 
 export {
   verifyUser, findUser, createUser, updateUser,
-  setUser, getUser, removeUser, deleteUser
+  setUser, getUser, removeUser, deleteUser, 
+  getAllProducts, createProduct
 };
