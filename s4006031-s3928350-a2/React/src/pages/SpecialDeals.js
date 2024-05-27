@@ -42,9 +42,12 @@ function SpecialDeals() {
           // Use the discounted products directly instead of refetching
           setRandomProducts(specialDeals);
 
-          // Optional: You can still call setSpecialDeals to save them to the database for future use
+          // Remove the id field before saving special deals to the database
+          const dealsWithoutId = specialDeals.map(({ id, ...rest }) => rest);
+
+          // Save special deals to the database
           console.log("Saving special deals to the database...");
-          await setSpecialDeals(specialDeals);
+          await setSpecialDeals(dealsWithoutId);
           console.log("Special deals saved to the database.");
         } else {
           setRandomProducts(specialDeals);

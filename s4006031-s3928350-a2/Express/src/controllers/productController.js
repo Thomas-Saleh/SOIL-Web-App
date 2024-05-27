@@ -65,8 +65,14 @@ exports.setSpecialDeals = async (req, res) => {
     await db.specialDeal.destroy({ where: {} });
     console.log("Existing special deals cleared.");
 
-    await db.specialDeal.bulkCreate(specialDeals);
-    console.log("Special deals successfully stored in database:", specialDeals);
+    // Remove the id field from special deals to avoid primary key conflict
+    const dealsWithoutId = specialDeals.map(deal => {
+      const { id, ...rest } = deal;
+      return rest;
+    });
+
+    await db.specialDeal.bulkCreate(dealsWithoutId);
+    console.log("Special deals successfully stored in database:", dealsWithoutId);
 
     res.json({ message: "Special deals updated!" });
   } catch (error) {
