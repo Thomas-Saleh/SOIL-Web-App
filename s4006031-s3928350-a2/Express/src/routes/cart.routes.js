@@ -14,6 +14,12 @@ module.exports = (express, app) => {
   // Remove a product from the cart.
   router.delete("/:id", controller.removeFromCart);
 
+  // Checkout route
+  router.post("/checkout", controller.checkout);
+
+  // Clear the cart for a user.
+  router.delete("/clear/:userId", controller.clearCart);
+
   // Add routes to server.
   app.use("/api/cart", router);
 };
