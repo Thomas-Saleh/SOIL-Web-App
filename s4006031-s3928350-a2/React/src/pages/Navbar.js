@@ -1,9 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
 function Navbar() {
   const [productDropdown, setProductDropdown] = useState(false);
   const [accountDropdown, setAccountDropdown] = useState(false);
+
+  const productRef = useRef(null);
+  const accountRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        productRef.current &&
+        !productRef.current.contains(event.target) &&
+        accountRef.current &&
+        !accountRef.current.contains(event.target)
+      ) {
+        setProductDropdown(false);
+        setAccountDropdown(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const toggleProductDropdown = () => {
+    setProductDropdown(!productDropdown);
+  };
+
+  const toggleAccountDropdown = () => {
+    setAccountDropdown(!accountDropdown);
+  };
 
   return (
     <nav className="bg-white border-b border-gray-200 shadow-md">
@@ -14,12 +44,9 @@ function Navbar() {
         </Link>
         <div className="flex space-x-4 items-center">
           <ul className="flex space-x-4 items-center">
-            <li>
-              <Link to="/" className="text-gray-900 hover:text-blue-700 py-2 px-3 rounded">Home</Link>
-            </li>
-            <li className="relative">
+            <li className="relative" ref={productRef}>
               <button
-                onClick={() => setProductDropdown(!productDropdown)}
+                onClick={toggleProductDropdown}
                 className="flex items-center justify-between text-gray-900 hover:text-blue-700 py-2 px-3 rounded focus:outline-none"
               >
                 Products
@@ -45,9 +72,9 @@ function Navbar() {
             </li>
           </ul>
           <ul className="flex space-x-4 items-center">
-            <li className="relative">
+            <li className="relative" ref={accountRef}>
               <button
-                onClick={() => setAccountDropdown(!accountDropdown)}
+                onClick={toggleAccountDropdown}
                 className="flex items-center justify-between text-gray-900 hover:text-blue-700 py-2 px-3 rounded focus:outline-none"
               >
                 <img src="user.png" className="h-6" alt="Account Icon" />
