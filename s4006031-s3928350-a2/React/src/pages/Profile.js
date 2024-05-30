@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { findUser,getUser, updateUser, deleteUser } from '../data/repository'; // Import the necessary functions
+import { findUser, updateUser, deleteUser } from '../data/repository';
+import { decodeJWT } from '../utils/jwtUtils';
 
 const activityLevels = ['light', 'moderate', 'active', 'very_active'];
 const dietaryPreferences = ['vegan', 'vegetarian', 'pescatarian', 'dairy free', 'carnivore diet'];
 const healthGoals = ['weight loss', 'muscle gain', 'maintenance', 'sleep 7 to 9 hours', 'eat nutritiously'];
-
 
 function Profile() {
   const [userDetails, setUserDetails] = useState(null);
@@ -16,25 +16,17 @@ function Profile() {
   useEffect(() => {
     const sessionToken = localStorage.getItem('sessionToken');
     if (sessionToken) {
-        fetchUserDetails();
+      const decodedToken = decodeJWT(sessionToken);
+      if (decodedToken) {
+        fetchUserDetails(decodedToken.user_id);
+      }
     }
   }, []);
 
-
-  const fetchUserDetails = async () => {
+  const fetchUserDetails = async (userId) => {
     try {
-      // Retrieve the user object from localStorage
-      const userString = localStorage.getItem('users');
-      if (!userString) {
-        throw new Error("No user found in localStorage");
-      }
-
-      // Parse the user object
-      const userObject = JSON.parse(userString);
-      const userId = userObject.id;
       const user = await findUser(userId);
       if (user && user.email) {
-        console.log("Set user details", user)
         setUserDetails(user);
       } else {
         console.error('User not found or incomplete user data:', user);
@@ -42,6 +34,11 @@ function Profile() {
     } catch (error) {
       console.error('Error fetching user details:', error);
     }
+  };
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
   const clearShoppingCart = () => {
@@ -56,7 +53,7 @@ function Profile() {
 
   const handleEdit = () => {
     setIsEditing(true);
-    setEditedUser({ ...userDetails, password: ''  });
+    setEditedUser({ ...userDetails, password: '' });
   };
 
   const handleChange = (e) => {
@@ -75,7 +72,7 @@ function Profile() {
     }
 
     try {
-      await updateUser(editedUser); // Call the API to update user details
+      await updateUser(editedUser);
       setUserDetails(editedUser);
       setIsEditing(false);
 
@@ -91,9 +88,9 @@ function Profile() {
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete your account?')) {
       try {
-        await deleteUser(userDetails.id); // Call the API to delete user
+        await deleteUser(userDetails.id);
         clearShoppingCart();
-        handleLogout(); // Logout user after deletion
+        handleLogout();
       } catch (error) {
         console.error('Error deleting user account:', error);
       }
@@ -129,7 +126,7 @@ function Profile() {
           <div>
             <div className="flex flex-col space-y-2">
               <label className="block text-sm font-bold mb-2 text-gray-1000">Name:</label>
-              <input type="text" name="name" value={editedUser.username} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" />
+              <input type="text" name="username" value={editedUser.username} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" />
 
               <label className="block text-sm font-bold mb-2 text-gray-1000">Email:</label>
               <input type="email" name="email" value={editedUser.email} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" />
@@ -187,7 +184,7 @@ function Profile() {
           <div>
             <p className="text-2xl mb-4"><strong>Hello, {userDetails.username}!</strong></p>
             <p className="text-lg mb-2"><strong>Email:</strong> {userDetails.email}</p>
-            <p className="text-lg mb-2"><strong>Date of Joining:</strong> {userDetails.created_at}</p>
+            <p className="text-lg mb-2"><strong>Date of Joining:</strong> {formatDate(userDetails.created_at)}</p>
             <p className="text-lg mb-2"><strong>Age:</strong> {userDetails.age}</p>
             <p className="text-lg mb-2"><strong>Weight:</strong> {userDetails.weight} kg</p>
             <p className="text-lg mb-2"><strong>Height:</strong> {userDetails.height} cm</p>

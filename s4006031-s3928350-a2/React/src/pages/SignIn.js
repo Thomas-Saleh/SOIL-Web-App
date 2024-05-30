@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { verifyUser, getUser, setUser } from '../data/repository'; 
+import { decodeJWT } from '../utils/jwtUtils'; // Import the custom decode function
+
 
 function SignIn() {
   const [loginDetails, setLoginDetails] = useState({
@@ -27,10 +29,11 @@ function SignIn() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const user = await verifyUser(loginDetails.email, loginDetails.password);
-      if (user) {
-        localStorage.setItem('sessionToken', 'your_generated_token');
-        setUser(user); // Store user details in localStorage
+      const response = await verifyUser(loginDetails.email, loginDetails.password);
+      if (response && response.token) {
+        localStorage.setItem('sessionToken', response.token);
+        const decodedToken = decodeJWT(response.token);
+        setUser(decodedToken); // Store decoded user details in localStorage
         setIsLoggedIn(true);
         setLoginError('');
       } else {
@@ -39,7 +42,7 @@ function SignIn() {
     } catch (error) {
       setLoginError('Invalid email or password.');
     }
-  };
+  }
 
   const handleLogout = () => {
     localStorage.removeItem('sessionToken');

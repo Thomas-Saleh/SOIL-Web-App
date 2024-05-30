@@ -1,57 +1,49 @@
 import React, { useState, useEffect } from 'react';
+import { getCartItems, updateCartItem, removeCartItem } from '../data/repository'; // Import the necessary functions
+import { decodeJWT } from '../utils/jwtUtils'; // Import the custom decode function
 import Checkout from './Checkout';
 
 function Cart() {
-  // State variables for cart items and checkout display
   const [cart, setCart] = useState([]);
   const [showCheckout, setShowCheckout] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-
   useEffect(() => {
-    // Load cart items from local storage
-    const storedCart = localStorage.getItem('cart');
-    if (storedCart) {
-      setCart(JSON.parse(storedCart));
-    }
-
     // Check if the user is logged in
     const sessionToken = localStorage.getItem('sessionToken');
     if (sessionToken) {
       setIsLoggedIn(true);
+      const decodedToken = decodeJWT(sessionToken);
+      const userId = decodedToken.user_id;
+      // Fetch cart items from the backend
+      getCartItems(userId).then(setCart).catch(console.error);
     }
   }, []);
 
-  // Function to update the quantity of an item in the cart
-  const updateQuantity = (itemName, newQuantity) => {
+  const updateQuantity = (itemId, newQuantity) => {
     const updatedCart = cart.map(item => {
-      if (item.name === itemName) {
-        return { ...item, quantity: newQuantity };
+      if (item.id === itemId) {
+        const updatedItem = { ...item, quantity: newQuantity };
+        updateCartItem(itemId, newQuantity); // Update item in the backend
+        return updatedItem;
       }
       return item;
     });
     setCart(updatedCart);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
   };
 
-  // Function to remove an item from the cart
-  const removeFromCart = (itemName) => {
-    const updatedCart = cart.filter(item => item.name !== itemName);
+  const removeFromCart = (itemId) => {
+    const updatedCart = cart.filter(item => item.id !== itemId);
+    removeCartItem(itemId); // Remove item from the backend
     setCart(updatedCart);
-    localStorage.setItem('cart', JSON.stringify(updatedCart));
   };
 
-  
-
-  // Calculate total price
-  const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
-
-  // Function to handle checkout button click
   const handleCheckout = () => {
     setShowCheckout(true);
   };
 
-  // If user is not logged in, show sign-in prompt
+  const totalPrice = cart.reduce((total, item) => total + item.product.price * item.quantity, 0); // Calculate total price
+
   if (!isLoggedIn) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -67,49 +59,42 @@ function Cart() {
     );
   }
 
-  // Render message if cart is empty
   if (cart.length === 0) {
     return (
-        <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-screen">
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4">
-          Your cart is empty
+            Your cart is empty
           </h1>
         </div>
-        </div>
-      );
+      </div>
+    );
   }
-  
 
   return (
     <div>
-      {/* Shopping cart title */}
       <div className="bg-green-500 text-white py-4">
         <h1 className="text-3xl font-semibold text-center">Shopping Cart</h1>
       </div>
-      {/* Display cart items */}
       <ul>
         {cart.map((item, index) => (
           <li key={index} className="bg-gray-200 p-4 flex flex-col items-center justify-between">
-            <img src={item.imageUrl} alt={item.name} className="w-32 h-32 rounded-full" />
+            <img src={item.product.imageUrl} alt={item.product.name} className="w-32 h-32 rounded-full" />
             <div className="text-center">
-              <h3 className="text-lg font-semibold">{item.name}</h3>
-              <span>Quantity: <input type="number" min="1" value={item.quantity} onChange={(e) => updateQuantity(item.name, parseInt(e.target.value))} /></span>
-              <span>Total Price: ${(item.price * item.quantity).toFixed(2)}</span> {/* Calculate total price */}
+              <h3 className="text-lg font-semibold">{item.product.name}</h3>
+              <span>Quantity: <input type="number" min="1" value={item.quantity} onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))} /></span>
+              <span>Total Price: ${(item.product.price * item.quantity).toFixed(2)}</span>
             </div>
-            {/* Button to remove item from cart */}
             <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-2"
-              onClick={() => removeFromCart(item.name)}>Remove</button>          
-            </li>
+              onClick={() => removeFromCart(item.id)}>Remove</button>
+          </li>
         ))}
       </ul>
-      {/* Display total price and checkout button */}
       <div className="text-center mt-4">
         <h2 className="text-xl font-semibold">Total: ${totalPrice.toFixed(2)}</h2>
         <div>
-        {/* Button to initiate checkout process */}
-        <button onClick={handleCheckout} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Checkout</button>
-        {showCheckout && <Checkout cart={cart} />}
+          <button onClick={handleCheckout} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Checkout</button>
+          {showCheckout && <Checkout cart={cart} />}
         </div>
       </div>
     </div>

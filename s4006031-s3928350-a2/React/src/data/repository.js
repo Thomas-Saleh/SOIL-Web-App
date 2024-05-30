@@ -7,6 +7,8 @@ const USER_KEY = "users";
 // --- User ---------------------------------------------------------------------------------------
 async function verifyUser(email, password) {
   const response = await axios.post(API_HOST + "/api/users/login", { email, password });
+  const token = response.data.token;
+  localStorage.setItem('sessionToken', token);
   return response.data;
 }
 
@@ -52,6 +54,27 @@ async function setSpecialDeals(specialDeals) {
   return response.data;
 }
 
+// --- Cart ---------------------------------------------------------------------------------------
+async function getCartItems(userId) {
+  const response = await axios.get(`${API_HOST}/api/cart/${userId}`);
+  return response.data;
+}
+
+async function addCartItem(cartItem) {
+  const response = await axios.post(`${API_HOST}/api/cart`, cartItem);
+  return response.data;
+}
+
+async function updateCartItem(itemId, newQuantity) {
+  const response = await axios.put(`${API_HOST}/api/cart/${itemId}`, { quantity: newQuantity });
+  return response.data;
+}
+
+async function removeCartItem(itemId) {
+  const response = await axios.delete(`${API_HOST}/api/cart/${itemId}`);
+  return response.data;
+}
+
 // --- Helper functions to interact with local storage --------------------------------------------
 function setUser(user) {
   localStorage.setItem(USER_KEY, JSON.stringify(user));
@@ -75,5 +98,6 @@ function removeUser() {
 export {
   verifyUser, findUser, createUser, updateUser,
   setUser, getUser, removeUser, deleteUser, 
-  getAllProducts, createProduct, getSpecialDeals, setSpecialDeals
+  getAllProducts, createProduct, getSpecialDeals, setSpecialDeals,
+  getCartItems, addCartItem, updateCartItem, removeCartItem
 };

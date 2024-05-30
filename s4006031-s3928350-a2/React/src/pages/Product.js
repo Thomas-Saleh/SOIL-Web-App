@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
+import { addCartItem } from "../data/repository"; // Import the addCartItem function
+import { decodeJWT } from '../utils/jwtUtils'; // Import the custom decode function
 
 function Product() {
   const [vegetables, setVegetables] = useState([]);
@@ -28,28 +30,41 @@ function Product() {
   };
 
   // Add a vegetable to the cart
-  const addToCart = (vegetable) => {
+  const addToCart = async (vegetable) => {
     const sessionToken = localStorage.getItem("sessionToken");
+    console.log("Session token:", sessionToken);
+
     if (!sessionToken) {
       alert("You must be logged in to add items to the cart.");
       window.location.href = "/sign-in";
       return;
     }
 
-    const quantity = quantities[vegetable.name] || 1;
-    console.log(`Added ${quantity} ${vegetable.name} to cart`);
+    const decodedToken = decodeJWT(sessionToken);
+    console.log("Decoded token:", decodedToken);
 
-    let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
-    const existingItemIndex = cartItems.findIndex(
-      (item) => item.name === vegetable.name
-    );
-    if (existingItemIndex !== -1) {
-      cartItems[existingItemIndex].quantity += quantity;
-    } else {
-      cartItems.push({ ...vegetable, quantity });
+    if (!decodedToken) {
+      alert("Invalid session token.");
+      return;
     }
 
-    localStorage.setItem("cart", JSON.stringify(cartItems));
+    const user_id = decodedToken.user_id;
+    const quantity = quantities[vegetable.name] || 1;
+    console.log(`Adding ${quantity} ${vegetable.name} to cart`);
+
+    try {
+      const cartItem = await addCartItem({
+        user_id,
+        product_id: vegetable.id,
+        quantity
+      });
+
+      console.log("Item added to cart:", cartItem);
+      alert(`${vegetable.name} added to cart!`);
+    } catch (error) {
+      console.error("Failed to add item to cart:", error);
+      alert("Failed to add item to cart. Please try again.");
+    }
   };
 
   // Render the vegetable market
@@ -86,6 +101,6 @@ function Product() {
       </div>
     </div>
   );
-};  
+};
 
 export default Product;
