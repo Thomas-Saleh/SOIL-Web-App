@@ -6,7 +6,7 @@ module.exports = (express, app) => {
   router.get("/product/:productId", controller.getAllReviewsForProduct);
 
   // Create a new review for a product.
-  router.post("/product/:productId", controller.createReview);
+  router.post("/product/:productId", controller.addReview);
 
   // Update a review.
   router.put("/:id", controller.updateReview);

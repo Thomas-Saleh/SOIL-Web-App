@@ -85,6 +85,27 @@ async function clearCart(userId) {
   return response.data;
 }
 
+// --- Reviews ---------------------------------------------------------------------------------
+async function getAllReviewsForProduct(productId) {
+  const response = await axios.get(`${API_HOST}/api/reviews/product/${productId}`);
+  return response.data;
+}
+
+async function addReview(reviewData) {
+  const response = await axios.post(`${API_HOST}/api/reviews/product/${reviewData.product_id}`, reviewData);
+  return response.data;
+}
+
+async function updateReview(reviewId, review) {
+  const response = await axios.put(`${API_HOST}/api/reviews/${reviewId}`, review);
+  return response.data;
+}
+
+async function deleteReview(reviewId) {
+  const response = await axios.delete(`${API_HOST}/api/reviews/${reviewId}`);
+  return response.data;
+}
+
 // --- Helper functions to interact with local storage --------------------------------------------
 function setUser(user) {
   localStorage.setItem(USER_KEY, JSON.stringify(user));
@@ -109,5 +130,6 @@ export {
   verifyUser, findUser, createUser, updateUser,
   setUser, getUser, removeUser, deleteUser, 
   getAllProducts, createProduct, getSpecialDeals, setSpecialDeals,
-  getCartItems, addCartItem, updateCartItem, removeCartItem, checkout, clearCart
+  getCartItems, addCartItem, updateCartItem, removeCartItem, checkout, clearCart,
+  getAllReviewsForProduct, addReview, updateReview, deleteReview
 };

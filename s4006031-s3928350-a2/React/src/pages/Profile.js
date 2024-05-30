@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { findUser, updateUser, deleteUser } from '../data/repository';
 import { decodeJWT } from '../utils/jwtUtils';
 
-const activityLevels = ['light', 'moderate', 'active', 'very_active'];
+const activityLevels = ['light', 'moderate', 'active', 'very active'];
 const dietaryPreferences = ['vegan', 'vegetarian', 'pescatarian', 'dairy free', 'carnivore diet'];
 const healthGoals = ['weight loss', 'muscle gain', 'maintenance', 'sleep 7 to 9 hours', 'eat nutritiously'];
 
