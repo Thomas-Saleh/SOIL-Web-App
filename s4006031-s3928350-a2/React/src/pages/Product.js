@@ -70,12 +70,12 @@ function Product() {
   // Render the vegetable market
   return (
     <div>
-      <div className="bg-green-800 text-white py-4">
+      <div className="bg-green-600 text-white py-4">
         <h1 className="text-3xl font-semibold text-center">Vegetable Market</h1>
         <p className="text-center">Explore our selection of fresh organic vegetables.</p>
       </div>
   
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 justify-center mt-8 px-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 justify-center mt-8 px-4">
         {vegetables.map((vegetable, index) => (
           <div key={index} className="bg-white border border-gray-300 rounded-lg shadow-lg p-6 flex flex-col items-center">
             <img src={vegetable.imageUrl} alt={vegetable.name} className="w-32 h-32 rounded-full p-2 bg-gray-100" />
@@ -100,7 +100,7 @@ function Product() {
         ))}
       </div>
     </div>
-  );  
+  );
 };
 
 export default Product;
