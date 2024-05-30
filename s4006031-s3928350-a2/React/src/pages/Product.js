@@ -88,7 +88,7 @@ function Product() {
   // Render the vegetable market
   return (
     <div>
-      <div className="bg-green-600 text-white py-4">
+      <div className="bg-green-800 text-white py-4">
         <h1 className="text-3xl font-semibold text-center">Vegetable Market</h1>
         <p className="text-center">Explore our selection of fresh organic vegetables.</p>
       </div>
