@@ -90,19 +90,19 @@ function SpecialDeals() {
 
   return (
     <div>
-      <div className="bg-green-500 text-white py-4">
+      <div className="bg-green-600 text-white py-4">
         <h1 className="text-3xl font-semibold text-center">Special Deals</h1>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 justify-center">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 justify-center mt-8 px-4">
         {randomProducts.length === 0 ? (
-          <p className="text-center">Loading ... </p>
+          <p className="text-center text-gray-700">Loading...</p>
         ) : (
           randomProducts.map((product) => (
-            <div key={product.id} className="bg-gray-200 p-4 flex flex-col items-center justify-between">
-              <img src={product.imageUrl} alt={product.name} className="w-32 h-32 rounded-full" />
-              <div className="text-center">
-                <h2 className="text-lg font-semibold">{product.name}</h2>
-                <p className="text-sm text-red-500">Special Price: ${Number(product.price).toFixed(2)}</p>
+            <div key={product.id} className="bg-white border border-gray-300 rounded-lg shadow-lg p-6 flex flex-col items-center">
+              <img src={product.imageUrl} alt={product.name} className="w-32 h-32 rounded-full p-2 bg-gray-100" />
+              <div className="text-center mt-4">
+                <h2 className="text-xl font-semibold text-gray-800">{product.name}</h2>
+                <p className="text-sm text-red-500 mt-2">Special Price: ${Number(product.price).toFixed(2)}</p>
                 <input
                   type="number"
                   min="1"
@@ -111,7 +111,10 @@ function SpecialDeals() {
                   className="mt-2 w-16 text-center border border-gray-300 rounded"
                 />
               </div>
-              <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onClick={() => addToCart(product)}>
+              <button
+                className="bg-green-500 hover:bg-green-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 mt-4"
+                onClick={() => addToCart(product)}
+              >
                 Add to Cart
               </button>
             </div>
@@ -119,7 +122,7 @@ function SpecialDeals() {
         )}
       </div>
     </div>
-  );
+  );  
 }
 
 export default SpecialDeals;
