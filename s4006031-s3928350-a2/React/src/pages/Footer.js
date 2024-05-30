@@ -3,20 +3,23 @@ import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <footer className="bg-green-600 py-6">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+    <footer className="bg-green-800 text-center text-white py-6">
+      <div className="container mx-auto flex justify-between items-center">
+        {/* Copyright */}
+        <div className="text-green-200">&copy; {new Date().getFullYear()} SOIL Organic Food Grocer</div>
+
+        {/* Social Media Icons */}
         <div className="flex space-x-4">
-          <Link to="/" rel="noopener noreferrer">
+          <Link to="/" className="text-green-200" rel="noopener noreferrer">
             <img src="facebook.png" alt="Facebook" className="h-6 w-6" />
           </Link>
-          <Link to="/" rel="noopener noreferrer">
+          <Link to="/" className="text-green-200" rel="noopener noreferrer">
             <img src="twitter.png" alt="Twitter" className="h-6 w-6" />
           </Link>
-          <Link to="/" rel="noopener noreferrer">
+          <Link to="/" className="text-green-200" rel="noopener noreferrer">
             <img src="instagram.png" alt="Instagram" className="h-6 w-6" />
           </Link>
         </div>
-        <div className="text-gray-100 text-sm">&copy; SOIL Organic Food Grocer {new Date().getFullYear()}</div>
       </div>
     </footer>
   );
