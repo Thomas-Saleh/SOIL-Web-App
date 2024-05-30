@@ -6,7 +6,7 @@ function Navbar() {
   const [accountDropdown, setAccountDropdown] = useState(false);
 
   return (
-    <nav className="bg-white border-b border-gray-200 shadow-md">
+    <nav className="bg-white border-b border-gray-200 shadow-md fixed w-full z-20 top-0 left-0">
       <div className="max-w-screen-xl mx-auto p-4 flex justify-between items-center">
         <Link to="/" className="flex items-center space-x-3">
           <img src="SOIL icon.png" className="h-10" alt="SOIL Icon" />
