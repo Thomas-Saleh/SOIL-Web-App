@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { getSpecialDeals, setSpecialDeals } from "../data/repository";
+import { getSpecialDeals, setSpecialDeals, addCartItem } from "../data/repository";
 import axios from 'axios';
+import { decodeJWT } from '../utils/jwtUtils'; // Import the custom decode function
 
 function SpecialDeals() {
   const [randomProducts, setRandomProducts] = useState([]);
@@ -68,24 +69,37 @@ function SpecialDeals() {
     }));
   };
 
-  const addToCart = (product) => {
+  const addToCart = async (product) => {
     const sessionToken = localStorage.getItem('sessionToken');
     if (!sessionToken) {
       alert('You must be logged in to add items to the cart.');
       window.location.href = '/sign-in';
       return;
     }
-    
-    const quantity = quantities[product.name] || 1; // Default quantity is 1
-    console.log(`Added ${quantity} ${product.name} to cart`);
-    let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-    const existingItems = cartItems.findIndex(item => item.name === product.name);
-    if (existingItems !== -1) {
-      cartItems[existingItems].quantity += quantity;
-    } else {
-      cartItems.push({ ...product, quantity });
+
+    const decodedToken = decodeJWT(sessionToken);
+    if (!decodedToken) {
+      alert("Invalid session token.");
+      return;
     }
-    localStorage.setItem('cart', JSON.stringify(cartItems));
+
+    const user_id = decodedToken.user_id;
+    const quantity = quantities[product.name] || 1; // Default quantity is 1
+    console.log(`Adding ${quantity} ${product.name} to cart`);
+
+    try {
+      const cartItem = await addCartItem({
+        user_id,
+        product_id: product.id,
+        quantity
+      });
+
+      console.log("Item added to cart:", cartItem);
+      alert(`${product.name} added to cart!`);
+    } catch (error) {
+      console.error("Failed to add item to cart:", error);
+      alert("Failed to add item to cart. Please try again.");
+    }
   };
 
   return (

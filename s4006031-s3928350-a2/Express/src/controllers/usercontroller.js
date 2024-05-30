@@ -1,5 +1,7 @@
 const db = require("../database/index.js");
 const argon2 = require("argon2");
+const jwt = require('jsonwebtoken');
+
 
 // Select all users from the database.
 exports.getAllUsers = async (req, res) => {
@@ -18,12 +20,13 @@ exports.login = async (req, res) => {
   try {
     const user = await db.user.findOne({ where: { email: req.body.email } });
     if (user && await argon2.verify(user.password, req.body.password)) {
-      // Set login status
-      await user.update({ isLoggedIn: true });
+      // Generate JWT token
+      const token = jwt.sign({ user_id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-      res.json(user); // Respond with user data on successful login
+      // Respond with user data and token
+      res.json({ user, token });
     } else {
-      res.status(401).json({ message: 'Invalid email or password' }); // Respond with an error message on failure
+      res.status(401).json({ message: 'Invalid email or password' });
     }
   } catch (error) {
     console.error('Error logging in:', error);
