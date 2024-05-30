@@ -75,6 +75,16 @@ async function removeCartItem(itemId) {
   return response.data;
 }
 
+async function checkout(userId) {
+  const response = await axios.post(`${API_HOST}/api/cart/checkout`, { userId });
+  return response.data;
+}
+
+async function clearCart(userId) {
+  const response = await axios.delete(`${API_HOST}/api/cart/clear`, { data: { userId } });
+  return response.data;
+}
+
 // --- Helper functions to interact with local storage --------------------------------------------
 function setUser(user) {
   localStorage.setItem(USER_KEY, JSON.stringify(user));
@@ -99,5 +109,5 @@ export {
   verifyUser, findUser, createUser, updateUser,
   setUser, getUser, removeUser, deleteUser, 
   getAllProducts, createProduct, getSpecialDeals, setSpecialDeals,
-  getCartItems, addCartItem, updateCartItem, removeCartItem
+  getCartItems, addCartItem, updateCartItem, removeCartItem, checkout, clearCart
 };

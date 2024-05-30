@@ -76,3 +76,31 @@ exports.removeFromCart = async (req, res) => {
     res.status(500).json({ error: "Failed to remove from cart" });
   }
 };
+
+// Checkout and clear the cart
+exports.checkout = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    // Implement any necessary logic for processing the checkout here
+    // For now, just clearing the cart
+    await db.cart.destroy({ where: { user_id: userId } });
+
+    res.json({ message: 'Checkout successful and cart cleared' });
+  } catch (error) {
+    console.error('Error during checkout:', error);
+    res.status(500).json({ error: 'Failed to process checkout' });
+  }
+};
+
+// Clear the cart for a user
+exports.clearCart = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    await db.cart.destroy({ where: { user_id: userId } });
+    res.json({ message: 'Cart cleared' });
+  } catch (error) {
+    console.error('Error clearing cart:', error);
+    res.status(500).json({ error: 'Failed to clear cart' });
+  }
+};
