@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { getSpecialDeals, setSpecialDeals, addCartItem } from "../data/repository";
 import axios from 'axios';
-import { decodeJWT } from '../utils/jwtUtils'; // Import the custom decode function
+import { decodeJWT } from '../utils/jwtUtils';
+import ReviewForm from './ReviewForm';
+import ReviewList from './ReviewList';
+
 
 function SpecialDeals() {
   const [randomProducts, setRandomProducts] = useState([]);
@@ -16,7 +19,6 @@ function SpecialDeals() {
         let specialDeals = await getSpecialDeals();
         console.log("Fetched special deals:", specialDeals);
 
-        // Check if specialDeals is null or undefined
         if (!specialDeals) {
           console.error("Special deals data is null or undefined");
           specialDeals = [];
@@ -24,29 +26,23 @@ function SpecialDeals() {
 
         if (specialDeals.length === 0) {
           console.log("No special deals found, fetching all products...");
-          // Fetch all products
           const response = await axios.get('http://localhost:3000/api/products');
           const products = response.data;
           console.log("Fetched products:", products);
 
-          // Shuffle the products array
           const shuffledProducts = products.sort(() => Math.random() - 0.5);
           console.log("Shuffled products:", shuffledProducts);
 
-          // Select the first numOfSpecials products and apply discount
           specialDeals = shuffledProducts.slice(0, numOfSpecials).map(product => {
             const discountedPrice = product.price * (1 - discountRate);
             return { ...product, price: discountedPrice };
           });
           console.log("Special deals with discounts applied:", specialDeals);
 
-          // Use the discounted products directly instead of refetching
           setRandomProducts(specialDeals);
 
-          // Remove the id field before saving special deals to the database
           const dealsWithoutId = specialDeals.map(({ id, ...rest }) => rest);
 
-          // Save special deals to the database
           console.log("Saving special deals to the database...");
           await setSpecialDeals(dealsWithoutId);
           console.log("Special deals saved to the database.");
@@ -84,7 +80,7 @@ function SpecialDeals() {
     }
 
     const user_id = decodedToken.user_id;
-    const quantity = quantities[product.name] || 1; // Default quantity is 1
+    const quantity = quantities[product.name] || 1;
     console.log(`Adding ${quantity} ${product.name} to cart`);
 
     try {
@@ -131,12 +127,14 @@ function SpecialDeals() {
               >
                 Add to Cart
               </button>
+              <ReviewForm productId={product.id} onReviewAdded={getSpecialDeals} />
+              <ReviewList productId={product.id} />
             </div>
           ))
         )}
       </div>
     </div>
-  );  
+  );
 }
 
 export default SpecialDeals;
