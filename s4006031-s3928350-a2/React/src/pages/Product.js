@@ -125,7 +125,7 @@ function Product() {
 
   // Render the vegetable market
   return (
-    <div>
+    <div className="box bg-F7B787">
       <div className="bg-green-800 text-white py-4">
         <h1 className="text-3xl font-semibold text-center">Vegetable Market</h1>
         <p className="text-center">Explore our selection of fresh organic vegetables.</p>
@@ -133,27 +133,27 @@ function Product() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 justify-center mt-8 px-4">
         {vegetables.map((vegetable) => (
-          <div key={vegetable.id} className="bg-white border border-gray-300 rounded-lg shadow-lg p-6 flex flex-col items-center">
-            <img src={vegetable.imageUrl} alt={vegetable.name} className="w-32 h-32 rounded-full p-2 bg-gray-100" />
-            <div className="text-center mt-4">
-              <h2 className="text-xl font-semibold text-gray-800">{vegetable.name}</h2>
-              <p className="text-sm text-gray-600 mt-2">Price: ${Number(vegetable.price).toFixed(2)}</p>
+          <div key={vegetable.id} className="bg-white border border-gray-300 rounded-lg shadow-md p-4 flex flex-col items-center mb-4">
+            <img src={vegetable.imageUrl} alt={vegetable.name} className="w-24 h-24 rounded-full p-2 bg-gray-100" />
+            <div className="text-center mt-2">
+              <h2 className="text-lg font-semibold text-gray-800">{vegetable.name}</h2>
+              <p className="text-sm text-gray-600 mt-1">Price: ${Number(vegetable.price).toFixed(2)}</p>
               <input
                 type="number"
                 min="1"
                 value={quantities[vegetable.name] || ""}
                 onChange={(e) => handleQuantityChange(vegetable.name, parseInt(e.target.value))}
-                className="mt-2 w-16 text-center border border-gray-300 rounded"
+                className="mt-1 w-12 text-center border border-gray-300 rounded"
               />
             </div>
             <button
-              className="bg-green-500 hover:bg-green-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 mt-4"
+              className="bg-green-500 hover:bg-green-700 text-white font-medium rounded-md text-sm px-4 py-2 mt-2"
               onClick={() => addToCart(vegetable)}
             >
               Add to Cart
             </button>
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 mt-4"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-md text-sm px-4 py-2 mt-2"
               onClick={() => toggleReviewForm(vegetable.id)}
             >
               Leave a Review
@@ -162,7 +162,7 @@ function Product() {
               <ReviewForm productId={vegetable.id} onReviewAdded={() => handleReviewAdded(vegetable.id)} />
             )}
             <button
-              className="bg-yellow-500 hover:bg-yellow-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 mt-4"
+              className="bg-yellow-500 hover:bg-yellow-700 text-white font-medium rounded-md text-sm px-4 py-2 mt-2"
               onClick={() => toggleReviewList(vegetable.id)}
             >
               {`See Reviews (${reviewCounts[vegetable.id] || 0})`}

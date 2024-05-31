@@ -136,7 +136,7 @@ function SpecialDeals() {
   };
 
   return (
-    <div>
+    <div className="box bg-F7B787">
       <div className="bg-green-600 text-white py-4">
         <h1 className="text-3xl font-semibold text-center">Special Deals</h1>
       </div>
@@ -148,27 +148,27 @@ function SpecialDeals() {
           <p className="text-center text-gray-700">Loading...</p>
         ) : (
           randomProducts.map((product) => (
-            <div key={product.id} className="bg-white border border-gray-300 rounded-lg shadow-lg p-6 flex flex-col items-center">
-              <img src={product.imageUrl} alt={product.name} className="w-32 h-32 rounded-full p-2 bg-gray-100" />
-              <div className="text-center mt-4">
-                <h2 className="text-xl font-semibold text-gray-800">{product.name}</h2>
-                <p className="text-sm text-red-500 mt-2">Special Price: ${Number(product.price).toFixed(2)}</p>
+            <div key={product.id} className="bg-white border border-gray-300 rounded-lg shadow-md p-4 flex flex-col items-center mb-4">
+              <img src={product.imageUrl} alt={product.name} className="w-24 h-24 rounded-full p-2 bg-gray-100" />
+              <div className="text-center mt-2">
+                <h2 className="text-lg font-semibold text-gray-800">{product.name}</h2>
+                <p className="text-sm text-red-500 mt-1">Special Price: ${Number(product.price).toFixed(2)}</p>
                 <input
                   type="number"
                   min="1"
                   value={quantities[product.name] || ''}
                   onChange={(e) => handleQuantityChange(product.name, parseInt(e.target.value))}
-                  className="mt-2 w-16 text-center border border-gray-300 rounded"
+                  className="mt-1 w-12 text-center border border-gray-300 rounded"
                 />
               </div>
               <button
-                className="bg-green-500 hover:bg-green-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 mt-4"
+                className="bg-green-500 hover:bg-green-700 text-white font-medium rounded-md text-sm px-4 py-2 mt-2"
                 onClick={() => addToCart(product)}
               >
                 Add to Cart
               </button>
               <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 mt-4"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-md text-sm px-4 py-2 mt-2"
                 onClick={() => toggleReviewForm(product.id)}
               >
                 Leave a Review
@@ -177,7 +177,7 @@ function SpecialDeals() {
                 <ReviewForm productId={product.id} onReviewAdded={() => handleReviewAdded(product.id)} />
               )}
               <button
-                className="bg-yellow-500 hover:bg-yellow-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 mt-4"
+                className="bg-yellow-500 hover:bg-yellow-700 text-white font-medium rounded-md text-sm px-4 py-2 mt-2"
                 onClick={() => toggleReviewList(product.id)}
               >
                 {`See Reviews (${reviewCounts[product.id] || 0})`}
@@ -191,6 +191,7 @@ function SpecialDeals() {
       </div>
     </div>
   );
+  
 }
 
 export default SpecialDeals;
