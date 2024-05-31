@@ -1,6 +1,6 @@
-
 import React, { useState } from 'react';
 import { createUser } from '../data/repository';  
+import { useNavigate } from 'react-router-dom';
 
 function Signup() {
   const [userDetails, setUserDetails] = useState({
@@ -11,6 +11,7 @@ function Signup() {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -22,12 +23,18 @@ function Signup() {
     if (validateForm()) {
       try {
         const response = await createUser(userDetails);
-
         if (response) {
           setIsSubmitted(true);
+          setTimeout(() => {
+            navigate('/sign-in');
+          }, 2000);
         }
       } catch (error) {
-        setErrorMessage(error.response?.data?.message || 'Failed to register. Please try again.');
+        if (error.response?.status === 409) {
+          setErrorMessage('Email is already in use. Please try again.');
+        } else {
+          setErrorMessage(error.response?.data?.message || 'Failed to register. Please try again.');
+        }
       }
     }
   };
@@ -62,7 +69,11 @@ function Signup() {
   };
 
   const renderSuccessMessage = () => {
-    return <div className="success-message">Registration successful! You can now sign in.</div>;
+    return (
+      <div className="success-message">
+        Registration successful! You will be redirected to the sign-in page shortly.
+      </div>
+    );
   };
 
   return (

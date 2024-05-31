@@ -5,6 +5,7 @@ const API_HOST = "http://localhost:3000";
 const USER_KEY = "users";
 
 // --- User ---------------------------------------------------------------------------------------
+
 async function verifyUser(email, password) {
   const response = await axios.post(API_HOST + "/api/users/login", { email, password });
   const token = response.data.token;
