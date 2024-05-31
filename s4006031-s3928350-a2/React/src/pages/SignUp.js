@@ -1,6 +1,6 @@
-
 import React, { useState } from 'react';
 import { createUser } from '../data/repository';  
+import { Link } from 'react-router-dom';
 
 function Signup() {
   const [userDetails, setUserDetails] = useState({
@@ -61,57 +61,71 @@ function Signup() {
     return true;
   };
 
-  const renderSuccessMessage = () => {
-    return <div className="success-message">Registration successful! You can now sign in.</div>;
-  };
-
   return (
-    <div>
-      <div className="bg-green-500 text-white py-4">
-        <h1 className="text-3xl font-semibold text-center">Sign Up</h1>
-      </div>
-      <div className="signin-container">
-        <div className="signin-background"></div>
-        {isSubmitted ? (
-          renderSuccessMessage()
-        ) : (
-          <form onSubmit={handleSubmit} className="signin-form">
-            <input
-              type="text"
-              name="username"
-              placeholder="Username"
-              required
+    <div className="flex items-center justify-center min-h-screen bg-[#F9E8D9]">
+      <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <h5 className="text-xl font-medium text-gray-900 dark:text-white">Sign up for our platform</h5>
+          <div>
+            <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
+            <input 
+              type="text" 
+              name="username" 
+              id="username" 
+              className="bg-[#F9E8D9] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#527853] focus:border-[#527853] block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" 
+              placeholder="Your username" 
+              required 
               onChange={handleInputChange}
-              className="signin-input"
             />
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              required
+          </div>
+          <div>
+            <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+            <input 
+              type="email" 
+              name="email" 
+              id="email" 
+              className="bg-[#F9E8D9] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#527853] focus:border-[#527853] block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" 
+              placeholder="name@company.com" 
+              required 
               onChange={handleInputChange}
-              className="signin-input"
             />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              required
+          </div>
+          <div>
+            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+            <input 
+              type="password" 
+              name="password" 
+              id="password" 
+              className="bg-[#F9E8D9] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#527853] focus:border-[#527853] block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" 
+              placeholder="••••••••" 
+              required 
               onChange={handleInputChange}
-              className="signin-input"
             />
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              required
+          </div>
+          <div>
+            <label htmlFor="confirmPassword" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
+            <input 
+              type="password" 
+              name="confirmPassword" 
+              id="confirmPassword" 
+              className="bg-[#F9E8D9] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#527853] focus:border-[#527853] block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" 
+              placeholder="••••••••" 
+              required 
               onChange={handleInputChange}
-              className="signin-input"
             />
-            {errorMessage && <div className="error-message">{errorMessage}</div>}
-            <button type="submit" className="signin-button">Sign Up</button>
-          </form>
-        )}
+          </div>
+          <button 
+            type="submit" 
+            className="w-full text-white bg-[#527853] hover:bg-[#EE7214] focus:ring-4 focus:outline-none focus:ring-[#EE7214] font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-[#527853] dark:hover:bg-[#EE7214] dark:focus:ring-[#EE7214]"
+          >
+            Sign Up
+          </button>
+          <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
+            Already have an account? <Link to="/sign-in" className="text-[#EE7214] hover:underline dark:text-[#EE7214]">Sign In</Link>
+          </div>
+          {errorMessage && <div className="text-red-500 text-sm">{errorMessage}</div>}
+          {isSubmitted && <div className="text-white text-sm">Registration successful! You can now sign in.</div>}
+        </form>
       </div>
     </div>
   );
