@@ -11,7 +11,7 @@ module.exports = (express, app) => {
   // Select one user from the database if username and password are a match.
   router.post("/login", controller.login);
 
-  router.post("/logout", controller.login);
+  router.post("/logout", controller.logout);
 
   // Create a new user.
   router.post("/", controller.createUser);
@@ -19,9 +19,6 @@ module.exports = (express, app) => {
   router.put("/:id", controller.updateUser);
 
   router.delete("/:id", controller.deleteUser);
-
-   // Clear user session.
-   router.put("/clear/:id", controller.clearUser);
 
   // Add routes to server.
   app.use("/api/users", router);

@@ -36,7 +36,7 @@ function ReviewList({ productId }) {
   const handleDelete = async (reviewId) => {
     try {
       await deleteReview(reviewId);
-      fetchReviews();
+      setReviews(reviews.filter(review => review.id !== reviewId)); // Update state immediately
     } catch (error) {
       console.error('Failed to delete review:', error);
     }

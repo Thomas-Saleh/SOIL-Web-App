@@ -9,9 +9,6 @@ module.exports = (sequelize, DataTypes) =>
         type: DataTypes.STRING(200),
         allowNull: false
       },
-      description: {
-        type: DataTypes.TEXT
-      },
       price: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false
@@ -24,6 +21,4 @@ module.exports = (sequelize, DataTypes) =>
         type: DataTypes.STRING,
         allowNull: true
       }
-    }, {
-      timestamps: false
     });

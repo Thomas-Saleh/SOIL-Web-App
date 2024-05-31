@@ -19,10 +19,6 @@ module.exports = (sequelize, DataTypes) =>
         type: DataTypes.STRING(255),
         allowNull: false
       },
-      isLoggedIn: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false
-      },
       age: {
         type: DataTypes.INTEGER
       },
@@ -41,14 +37,6 @@ module.exports = (sequelize, DataTypes) =>
       health_goals: {
         type: DataTypes.ENUM('weight loss', 'muscle gain', 'maintenance', 'sleep 7 to 9 hours', 'eat nutritiously')
       },
-      created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
-      },
-      updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
-      }
     }, {
-      timestamps: false
+      timestamps: true
     });
