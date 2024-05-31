@@ -70,7 +70,7 @@ function Signup() {
 
   const renderSuccessMessage = () => {
     return (
-      <div className="success-message">
+      <div className="success-message text-white">
         Registration successful! You will be redirected to the sign-in page shortly.
       </div>
     );

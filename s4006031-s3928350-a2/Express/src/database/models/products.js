@@ -13,10 +13,6 @@ module.exports = (sequelize, DataTypes) =>
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false
       },
-      category: {
-        type: DataTypes.ENUM('standard', 'special'),
-        allowNull: false
-      },
       imageUrl: {
         type: DataTypes.STRING,
         allowNull: true
