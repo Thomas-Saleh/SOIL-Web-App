@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createUser } from '../data/repository';  
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 function Signup() {
   const [userDetails, setUserDetails] = useState({
@@ -106,7 +106,7 @@ function Signup() {
             />
           </div>
           <div>
-            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+          <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
             <input 
               type="password" 
               name="password" 
@@ -139,7 +139,7 @@ function Signup() {
             Already have an account? <Link to="/sign-in" className="text-[#EE7214] hover:underline dark:text-[#EE7214]">Sign In</Link>
           </div>
           {errorMessage && <div className="text-red-500 text-sm">{errorMessage}</div>}
-          {isSubmitted && <div className="text-white text-sm">Registration successful! You can now sign in.</div>}
+          {isSubmitted && renderSuccessMessage()}
         </form>
       </div>
     </div>
@@ -147,3 +147,4 @@ function Signup() {
 }
 
 export default Signup;
+
