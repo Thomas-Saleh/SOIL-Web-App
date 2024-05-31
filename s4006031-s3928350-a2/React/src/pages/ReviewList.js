@@ -7,11 +7,23 @@ function ReviewList({ productId }) {
   const [reviews, setReviews] = useState([]);
   const [editingReview, setEditingReview] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [userReview, setUserReview] = useState(null); // Store user's review
 
   const fetchReviews = useCallback(async () => {
     try {
       const reviewsData = await getAllReviewsForProduct(productId);
       setReviews(reviewsData);
+
+      // Check if the user has already reviewed the product
+      const sessionToken = localStorage.getItem('sessionToken');
+      if (sessionToken) {
+        const decodedToken = decodeJWT(sessionToken);
+        const userId = decodedToken.user_id;
+        setUserId(userId);
+
+        const userReview = reviewsData.find(review => review.user_id === userId);
+        setUserReview(userReview);
+      }
     } catch (error) {
       console.error('Failed to fetch reviews:', error);
     }
@@ -19,11 +31,6 @@ function ReviewList({ productId }) {
 
   useEffect(() => {
     fetchReviews();
-    const sessionToken = localStorage.getItem('sessionToken');
-    if (sessionToken) {
-      const decodedToken = decodeJWT(sessionToken);
-      setUserId(decodedToken.user_id);
-    }
   }, [fetchReviews]);
 
   const handleDelete = async (reviewId) => {
@@ -69,11 +76,11 @@ function ReviewList({ productId }) {
           </div>
         ))
       )}
-      {editingReview && (
+      {(!userReview || editingReview) && (
         <ReviewForm
           productId={productId}
           onReviewAdded={handleReviewAdded}
-          existingReview={editingReview}
+          existingReview={editingReview || userReview}
         />
       )}
     </div>

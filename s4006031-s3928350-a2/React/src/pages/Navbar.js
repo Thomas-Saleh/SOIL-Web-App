@@ -4,9 +4,23 @@ import { Link } from "react-router-dom";
 function Navbar() {
   const [productDropdown, setProductDropdown] = useState(false);
   const [accountDropdown, setAccountDropdown] = useState(false);
-
+  const [hoverTimeout, setHoverTimeout] = useState(null);
   const productRef = useRef(null);
   const accountRef = useRef(null);
+
+  // Function to show the dropdown and clear any existing timeout
+  const showDropdown = (setDropdown) => {
+    clearTimeout(hoverTimeout);
+    setDropdown(true);
+  };
+
+  // Function to hide the dropdown after a short delay
+  const hideDropdown = (setDropdown) => {
+    const timeoutId = setTimeout(() => {
+      setDropdown(false);
+    }, 100); // 100ms delay before hiding the dropdown
+    setHoverTimeout(timeoutId);
+  };
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -27,14 +41,6 @@ function Navbar() {
     };
   }, []);
 
-  const toggleProductDropdown = () => {
-    setProductDropdown(!productDropdown);
-  };
-
-  const toggleAccountDropdown = () => {
-    setAccountDropdown(!accountDropdown);
-  };
-
   return (
     <nav className="bg-white border-b border-gray-200 shadow-md">
       <div className="max-w-screen-xl mx-auto p-4 flex justify-between items-center">
@@ -44,9 +50,15 @@ function Navbar() {
         </Link>
         <div className="flex space-x-4 items-center">
           <ul className="flex space-x-4 items-center">
-            <li className="relative" ref={productRef}>
+            <li
+              className="relative"
+              ref={productRef}
+              onMouseEnter={() => showDropdown(setProductDropdown)}
+              onMouseLeave={() => hideDropdown(setProductDropdown)}
+            >
+              
+            
               <button
-                onClick={toggleProductDropdown}
                 className="flex items-center justify-between text-gray-900 hover:text-blue-700 py-2 px-3 rounded focus:outline-none"
               >
                 Products
@@ -55,7 +67,15 @@ function Navbar() {
                 </svg>
               </button>
               {productDropdown && (
-                <div className="absolute z-10 bg-white border border-gray-200 shadow-lg mt-2 rounded-lg w-44">
+                <div
+                  className="absolute z-10 bg-white border border-gray-200 shadow-lg mt-2 rounded-lg w-44"
+                  onMouseEnter={() => setProductDropdown(true)}
+                  onMouseLeave={(e) => {
+                    if (!productRef.current.contains(e.relatedTarget)) {
+                      setProductDropdown(false);
+                    }
+                  }}
+                >
                   <ul className="py-2 text-sm text-gray-700">
                     <li>
                       <Link to="/product" className="block px-4 py-2 hover:bg-gray-100">Shop</Link>
@@ -69,39 +89,53 @@ function Navbar() {
             </li>
           </ul>
           <ul className="flex space-x-4 items-center">
-            <li className="relative" ref={accountRef}>
+            <li
+              className="relative"
+              ref={accountRef}
+              onMouseEnter={() => showDropdown(setAccountDropdown)}
+              onMouseLeave={() => hideDropdown(setAccountDropdown)}
+            >
               <button
-                onClick={toggleAccountDropdown}
                 className="flex items-center justify-between text-gray-900 hover:text-blue-700 py-2 px-3 rounded focus:outline-none"
               >
                 <img src="user.png" className="h-6" alt="Account Icon" />
               </button>
               {accountDropdown && (
-                <div className="absolute z-10 bg-white border border-gray-200 shadow-lg mt-2 rounded-lg w-44">
+                <div
+                  className="absolute z-10 bg-white border border-gray-200 shadow-lg mt-2 rounded-lg w-44"
+                  onMouseEnter={() => setAccountDropdown(true)}
+                  onMouseLeave={(e) => {
+                    if (!accountRef.current.contains(e.relatedTarget)) {
+                      setAccountDropdown(false);
+                    }
+                  }}
+                >
                   <ul className="py-2 text-sm text-gray-700">
                     <li>
-                      <Link to="/sign-in" className="block px-4 py-2 hover:bg-gray-100">Sign In</Link>
-                    </li>
-                    <li>
-                      <Link to="/sign-up" className="block px-4 py-2 hover:bg-gray-100">Sign Up</Link>
-                    </li>
-                    <li>
-                      <Link to="/user-profile" className="block px-4 py-2 hover:bg-gray-100">Profile</Link>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </li>
-            <li>
-              <Link to="/cart" className="text-gray-900 hover:text-blue-700 py-2 px-3 rounded">
-                <img src="trolley-cart.png" className="h-6" alt="Shopping Cart Icon" />
-              </Link>
-            </li>
-          </ul>
+                      <Link to="/sign-in" className="block px-4 py-2 hover
+                      hover:bg-gray-100">Sign In</Link>
+                      </li>
+                      <li>
+                        <Link to="/sign-up" className="block px-4 py-2 hover:bg-gray-100">Sign Up</Link>
+                      </li>
+                      <li>
+                        <Link to="/user-profile" className="block px-4 py-2 hover:bg-gray-100">Profile</Link>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </li>
+              <li>
+                <Link to="/cart" className="text-gray-900 hover:text-blue-700 py-2 px-3 rounded">
+                  <img src="trolley-cart.png" className="h-6" alt="Shopping Cart Icon" />
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-    </nav>
-  );
-}
-
-export default Navbar;
+      </nav>
+    );
+  }
+  
+  export default Navbar;
+  
