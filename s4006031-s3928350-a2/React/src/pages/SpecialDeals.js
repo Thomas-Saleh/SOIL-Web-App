@@ -7,7 +7,7 @@ import ReviewList from './ReviewList';
 
 function SpecialDeals() {
   const [randomProducts, setRandomProducts] = useState([]);
-  const discountRate = 0.4; // 40% discount
+  const discountRate = 0.5; // 40% discount
   const numOfSpecials = 5;
   const [quantities, setQuantities] = useState({});
   const [showReviewForm, setShowReviewForm] = useState({});
