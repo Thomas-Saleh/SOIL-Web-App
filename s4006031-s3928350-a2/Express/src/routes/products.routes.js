@@ -11,12 +11,6 @@ module.exports = (express, app) => {
   // Add a new product.
   router.post("/", controller.createProduct);
 
-  // Update an existing product.
-  router.put("/:id", controller.updateProduct);
-
-  // Delete a product.
-  router.delete("/:id", controller.deleteProduct);
-
   // Populate the database with initial data.
   router.post("/populate", controller.populateDatabase);
 

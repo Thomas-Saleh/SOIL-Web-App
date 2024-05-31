@@ -34,15 +34,7 @@ async function deleteUser(userId) {
 }
 
 // --- Products ---------------------------------------------------------------------------------------
-async function getAllProducts() {
-  const response = await axios.get(API_HOST + "/api/products");
-  return response.data;
-}
 
-async function createProduct(product) {
-  const response = await axios.post(API_HOST + "/api/products", product);
-  return response.data;
-}
 
 // --- Special Deals ------------------------------------------------------------------------------
 async function getSpecialDeals() {
@@ -130,7 +122,7 @@ function removeUser() {
 export {
   verifyUser, findUser, createUser, updateUser,
   setUser, getUser, removeUser, deleteUser, 
-  getAllProducts, createProduct, getSpecialDeals, setSpecialDeals,
+  getSpecialDeals, setSpecialDeals,
   getCartItems, addCartItem, updateCartItem, removeCartItem, checkout, clearCart,
   getAllReviewsForProduct, addReview, updateReview, deleteReview
 };
