@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
-import { addReview } from '../data/repository';
+import React, { useState, useEffect } from 'react';
+import { addReview, updateReview } from '../data/repository';
 import { decodeJWT } from '../utils/jwtUtils';
 
-function ReviewForm({ productId, onReviewAdded }) {
+function ReviewForm({ productId, onReviewAdded, existingReview }) {
   const [reviewText, setReviewText] = useState('');
   const [starRating, setStarRating] = useState(1);
+  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    if (existingReview) {
+      setReviewText(existingReview.review_text);
+      setStarRating(existingReview.star_rating);
+      setIsEditing(true);
+    }
+  }, [existingReview]);
 
   const handleReviewTextChange = (e) => setReviewText(e.target.value);
   const handleStarRatingChange = (e) => setStarRating(parseInt(e.target.value));
@@ -27,13 +36,16 @@ function ReviewForm({ productId, onReviewAdded }) {
       star_rating: starRating,
     };
 
-    console.log('Submitting review:', reviewData);
-
     try {
-      await addReview(reviewData);
+      if (isEditing) {
+        await updateReview(existingReview.id, reviewData);
+      } else {
+        await addReview(reviewData);
+      }
       onReviewAdded();
       setReviewText('');
       setStarRating(1);
+      setIsEditing(false);
     } catch (error) {
       console.error('Failed to create review:', error);
       alert('Failed to create review.');
@@ -42,13 +54,13 @@ function ReviewForm({ productId, onReviewAdded }) {
 
   return (
     <form onSubmit={handleSubmit} className="mt-4">
-      <h3 className="text-xl font-semibold text-gray-800">Leave a Review</h3>
+      <h3 className="text-xl font-semibold text-gray-800">{isEditing ? 'Edit Review' : 'Leave a Review'}</h3>
       <textarea
         value={reviewText}
         onChange={handleReviewTextChange}
         placeholder="Write your review here..."
         className="w-full border border-gray-300 rounded p-2 mt-2"
-        maxLength="255"
+        maxLength="100" // Enforce max length of 100 characters
         required
       />
       <div className="mt-2">
@@ -67,7 +79,7 @@ function ReviewForm({ productId, onReviewAdded }) {
         </select>
       </div>
       <button type="submit" className="bg-green-500 hover:bg-green-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 mt-4">
-        Submit Review
+        {isEditing ? 'Update Review' : 'Submit Review'}
       </button>
     </form>
   );

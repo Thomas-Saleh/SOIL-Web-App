@@ -10,17 +10,28 @@ function Product() {
   const [vegetables, setVegetables] = useState([]);
   const [quantities, setQuantities] = useState({});
   const [reviews, setReviews] = useState({}); // Store reviews for each product
+  const [showReviewForm, setShowReviewForm] = useState({});
+  const [showReviewList, setShowReviewList] = useState({});
+  const [reviewCounts, setReviewCounts] = useState({});
 
   // Define fetchVegetables function
   const fetchVegetables = async () => {
     try {
       const response = await axios.get('http://localhost:3000/api/products');
       setVegetables(response.data);
+      // Fetch review counts for each product
+      const reviewCountsData = {};
+      for (const product of response.data) {
+        const reviewsData = await getAllReviewsForProduct(product.id);
+        reviewCountsData[product.id] = reviewsData.length;
+      }
+      setReviewCounts(reviewCountsData);
+
     } catch (error) {
       console.error("Failed to fetch vegetables:", error);
     }
   };
-
+    
   // Define fetchReviews function
   const fetchReviews = useCallback(async (productId) => {
     try {
@@ -85,6 +96,33 @@ function Product() {
     }
   };
 
+  const toggleReviewForm = (productId) => {
+    setShowReviewForm(prevState => ({
+      ...prevState,
+      [productId]: !prevState[productId]
+    }));
+  };
+
+  const toggleReviewList = (productId) => {
+    setShowReviewList(prevState => ({
+      ...prevState,
+      [productId]: !prevState[productId]
+    }));
+  };
+
+  const handleReviewAdded = async (productId) => {
+    await fetchReviews(productId);
+    setReviewCounts(prevState => ({
+      ...prevState,
+      [productId]: prevState[productId] + 1
+    }));
+    setShowReviewForm(prevState => ({
+      ...prevState,
+      [productId]: false
+    }));
+  };
+
+
   // Render the vegetable market
   return (
     <div>
@@ -111,16 +149,32 @@ function Product() {
             <button
               className="bg-green-500 hover:bg-green-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 mt-4"
               onClick={() => addToCart(vegetable)}
-              >
-                Add to Cart
-              </button>
-              <ReviewForm productId={vegetable.id} onReviewAdded={() => fetchReviews(vegetable.id)} />
+            >
+              Add to Cart
+            </button>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 mt-4"
+              onClick={() => toggleReviewForm(vegetable.id)}
+            >
+              Leave a Review
+            </button>
+            {showReviewForm[vegetable.id] && (
+              <ReviewForm productId={vegetable.id} onReviewAdded={() => handleReviewAdded(vegetable.id)} />
+            )}
+            <button
+              className="bg-yellow-500 hover:bg-yellow-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 mt-4"
+              onClick={() => toggleReviewList(vegetable.id)}
+            >
+              {`See Reviews (${reviewCounts[vegetable.id] || 0})`}
+            </button>
+            {showReviewList[vegetable.id] && (
               <ReviewList productId={vegetable.id} reviews={reviews[vegetable.id] || []} />
-            </div>
-          ))}
-        </div>
+            )}
+          </div>
+        ))}
       </div>
-    );
-  }
-  
-  export default Product;
+    </div>
+  );
+}
+
+export default Product;

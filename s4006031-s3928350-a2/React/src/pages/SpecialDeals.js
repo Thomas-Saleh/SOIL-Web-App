@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { getSpecialDeals, setSpecialDeals, addCartItem } from "../data/repository";
+import { getSpecialDeals, setSpecialDeals, addCartItem, getAllReviewsForProduct } from "../data/repository";
 import axios from 'axios';
 import { decodeJWT } from '../utils/jwtUtils';
 import ReviewForm from './ReviewForm';
 import ReviewList from './ReviewList';
-
 
 function SpecialDeals() {
   const [randomProducts, setRandomProducts] = useState([]);
   const discountRate = 0.4; // 40% discount
   const numOfSpecials = 5;
   const [quantities, setQuantities] = useState({});
+  const [showReviewForm, setShowReviewForm] = useState({});
+  const [showReviewList, setShowReviewList] = useState({});
+  const [reviewCounts, setReviewCounts] = useState({});
 
   useEffect(() => {
     async function fetchSpecialDeals() {
@@ -50,6 +52,15 @@ function SpecialDeals() {
           setRandomProducts(specialDeals);
           console.log("Setting special deals from database:", specialDeals);
         }
+
+        // Fetch review counts for each product
+        const reviewCountsData = {};
+        for (const product of specialDeals) {
+          const reviews = await getAllReviewsForProduct(product.id);
+          reviewCountsData[product.id] = reviews.length;
+        }
+        setReviewCounts(reviewCountsData);
+
       } catch (error) {
         console.error("Failed to fetch special deals:", error);
       }
@@ -98,10 +109,39 @@ function SpecialDeals() {
     }
   };
 
+  const toggleReviewForm = (productId) => {
+    setShowReviewForm(prevState => ({
+      ...prevState,
+      [productId]: !prevState[productId]
+    }));
+  };
+
+  const toggleReviewList = (productId) => {
+    setShowReviewList(prevState => ({
+      ...prevState,
+      [productId]: !prevState[productId]
+    }));
+  };
+
+  const handleReviewAdded = async (productId) => {
+    const reviews = await getAllReviewsForProduct(productId);
+    setReviewCounts(prevState => ({
+      ...prevState,
+      [productId]: reviews.length
+    }));
+    setShowReviewForm(prevState => ({
+      ...prevState,
+      [productId]: false
+    }));
+  };
+
   return (
     <div>
       <div className="bg-green-600 text-white py-4">
         <h1 className="text-3xl font-semibold text-center">Special Deals</h1>
+      </div>
+      <div className="bg-red-500 text-white py-2">
+        <h1 className="text-2xl font-semibold text-center">50% Off Buy Now! </h1>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 justify-center mt-8 px-4">
         {randomProducts.length === 0 ? (
@@ -127,8 +167,24 @@ function SpecialDeals() {
               >
                 Add to Cart
               </button>
-              <ReviewForm productId={product.id} onReviewAdded={getSpecialDeals} />
-              <ReviewList productId={product.id} />
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 mt-4"
+                onClick={() => toggleReviewForm(product.id)}
+              >
+                Leave a Review
+              </button>
+              {showReviewForm[product.id] && (
+                <ReviewForm productId={product.id} onReviewAdded={() => handleReviewAdded(product.id)} />
+              )}
+              <button
+                className="bg-yellow-500 hover:bg-yellow-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 mt-4"
+                onClick={() => toggleReviewList(product.id)}
+              >
+                {`See Reviews (${reviewCounts[product.id] || 0})`}
+              </button>
+              {showReviewList[product.id] && (
+                <ReviewList productId={product.id} />
+              )}
             </div>
           ))
         )}

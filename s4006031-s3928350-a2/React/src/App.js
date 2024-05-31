@@ -8,7 +8,6 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Profile from './pages/Profile';
 import Product from './pages/Product';
-import DietPlan from './pages/DietPlan';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import SummaryPage from './pages/SummaryPage';
@@ -30,7 +29,6 @@ function App() {
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/user-profile" element={<Profile />} />
-            <Route path="/diet-plan" element={<DietPlan />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" component={<Checkout />} />
             <Route path="/summary" component={<SummaryPage />} />

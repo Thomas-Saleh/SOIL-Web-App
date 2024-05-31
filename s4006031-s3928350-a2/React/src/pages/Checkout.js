@@ -4,6 +4,7 @@ import SummaryPage from './SummaryPage'; // Import the SummaryPage component
 import { decodeJWT } from '../utils/jwtUtils'; // Import the custom decode function
 
 
+
 function Checkout({ cart }) {
   const [creditCardNumber, setCreditCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');

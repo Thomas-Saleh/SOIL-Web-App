@@ -63,9 +63,6 @@ function Navbar() {
                     <li>
                       <Link to="/special-deals" className="block px-4 py-2 hover:bg-gray-100">Sale</Link>
                     </li>
-                    <li>
-                      <Link to="/diet-plan" className="block px-4 py-2 hover:bg-gray-100">Diet Plan</Link>
-                    </li>
                   </ul>
                 </div>
               )}

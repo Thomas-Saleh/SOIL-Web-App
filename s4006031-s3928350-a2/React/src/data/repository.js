@@ -96,8 +96,8 @@ async function addReview(reviewData) {
   return response.data;
 }
 
-async function updateReview(reviewId, review) {
-  const response = await axios.put(`${API_HOST}/api/reviews/${reviewId}`, review);
+async function updateReview(reviewId, reviewData) {
+  const response = await axios.put(`${API_HOST}/api/reviews/${reviewId}`, reviewData);
   return response.data;
 }
 
