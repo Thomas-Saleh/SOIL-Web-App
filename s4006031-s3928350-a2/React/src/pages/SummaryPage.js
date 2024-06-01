@@ -1,7 +1,8 @@
 import React from 'react';
 
 function SummaryPage({ orderSummary }) {
-  const totalPrice = orderSummary.reduce((total, item) => total + item.product.price * item.quantity, 0);
+  // Calculate the total price using the item's price (which could be the special price)
+  const totalPrice = orderSummary.reduce((total, item) => total + item.price * item.quantity, 0);
 
   return (
     <div>
@@ -19,7 +20,7 @@ function SummaryPage({ orderSummary }) {
                 <div className="text-center">
                   <h3 className="text-lg font-semibold">{item.product.name}</h3>
                   <span className='mx-5'>Quantity: {item.quantity}</span>
-                  <span className='mx-5'>Total Price: ${(item.product.price * item.quantity).toFixed(2)}</span>
+                  <span className='mx-5'>Total Price: ${(item.price * item.quantity).toFixed(2)}</span>
                 </div>
               </li>
             ))}
