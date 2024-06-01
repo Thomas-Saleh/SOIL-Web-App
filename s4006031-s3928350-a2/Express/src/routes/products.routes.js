@@ -20,6 +20,8 @@ module.exports = (express, app) => {
   // Set special deals
   router.post("/special-deals", controller.setSpecialDeals);
 
+  router.post("/update-special-prices", controller.updateSpecialPrices);
+
   // Add routes to server.
   app.use("/api/products", router);
 };

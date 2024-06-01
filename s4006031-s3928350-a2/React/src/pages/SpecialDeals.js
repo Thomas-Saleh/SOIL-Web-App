@@ -1,63 +1,50 @@
 import React, { useState, useEffect } from 'react';
-import { getSpecialDeals, setSpecialDeals, addCartItem, getAllReviewsForProduct } from "../data/repository";
+import { getSpecialDeals, setSpecialDeals, getAllReviewsForProduct } from "../data/repository";
 import axios from 'axios';
 import { decodeJWT } from '../utils/jwtUtils';
 import ReviewForm from './ReviewForm';
 import ReviewList from './ReviewList';
 
 function SpecialDeals() {
-  const [randomProducts, setRandomProducts] = useState([]);
-  const discountRate = 0.5; // 40% discount
-  const numOfSpecials = 5;
+  const [specialDeals, setSpecialDealsState] = useState([]);
   const [quantities, setQuantities] = useState({});
   const [showReviewForm, setShowReviewForm] = useState({});
   const [showReviewList, setShowReviewList] = useState({});
   const [reviewCounts, setReviewCounts] = useState({});
+  const discountRate = 0.5; // 50% discount
+  const numOfSpecials = 5;
 
   useEffect(() => {
     async function fetchSpecialDeals() {
       try {
-        console.log("Fetching special deals...");
-        let specialDeals = await getSpecialDeals();
-        console.log("Fetched special deals:", specialDeals);
+        let deals = await getSpecialDeals();
 
-        if (!specialDeals) {
-          console.error("Special deals data is null or undefined");
-          specialDeals = [];
-        }
-
-        if (specialDeals.length === 0) {
-          console.log("No special deals found, fetching all products...");
+        if (!deals || deals.length === 0) {
           const response = await axios.get('http://localhost:3000/api/products');
           const products = response.data;
-          console.log("Fetched products:", products);
 
           const shuffledProducts = products.sort(() => Math.random() - 0.5);
-          console.log("Shuffled products:", shuffledProducts);
-
-          specialDeals = shuffledProducts.slice(0, numOfSpecials).map(product => {
+          deals = shuffledProducts.slice(0, numOfSpecials).map(product => {
             const discountedPrice = product.price * (1 - discountRate);
-            return { ...product, price: discountedPrice };
+            return { ...product, special_price: discountedPrice, product_id: product.id };
           });
-          console.log("Special deals with discounts applied:", specialDeals);
 
-          setRandomProducts(specialDeals);
+          await setSpecialDeals(deals);
 
-          const dealsWithoutId = specialDeals.map(({ id, ...rest }) => rest);
+          const specialPrices = deals.map(deal => ({
+            product_id: deal.product_id,
+            special_price: deal.special_price
+          }));
 
-          console.log("Saving special deals to the database...");
-          await setSpecialDeals(dealsWithoutId);
-          console.log("Special deals saved to the database.");
-        } else {
-          setRandomProducts(specialDeals);
-          console.log("Setting special deals from database:", specialDeals);
+          await axios.post('http://localhost:3000/api/products/update-special-prices', { specialPrices });
         }
 
-        // Fetch review counts for each product
+        setSpecialDealsState(deals);
+
         const reviewCountsData = {};
-        for (const product of specialDeals) {
-          const reviews = await getAllReviewsForProduct(product.id);
-          reviewCountsData[product.id] = reviews.length;
+        for (const deal of deals) {
+          const reviews = await getAllReviewsForProduct(deal.product_id);
+          reviewCountsData[deal.product_id] = reviews ? reviews.length : 0;
         }
         setReviewCounts(reviewCountsData);
 
@@ -69,10 +56,10 @@ function SpecialDeals() {
     fetchSpecialDeals();
   }, []);
 
-  const handleQuantityChange = (productName, quantity) => {
+  const handleQuantityChange = (productId, quantity) => {
     setQuantities(prevState => ({
       ...prevState,
-      [productName]: quantity
+      [productId]: quantity
     }));
   };
 
@@ -90,18 +77,21 @@ function SpecialDeals() {
       return;
     }
 
-    const user_id = decodedToken.user_id;
-    const quantity = quantities[product.name] || 1;
+    const quantity = quantities[product.product_id] || 1;
     console.log(`Adding ${quantity} ${product.name} to cart`);
 
     try {
-      const cartItem = await addCartItem({
-        user_id,
-        product_id: product.id,
-        quantity
+      const cartItem = await axios.post('http://localhost:3000/api/cart', {
+        product_id: product.product_id,
+        quantity,
+        price: product.special_price || product.price // Using the special price if available
+      }, {
+        headers: {
+          'Authorization': `Bearer ${sessionToken}`
+        }
       });
 
-      console.log("Item added to cart:", cartItem);
+      console.log("Item added to cart:", cartItem.data);
       alert(`${product.name} added to cart!`);
     } catch (error) {
       console.error("Failed to add item to cart:", error);
@@ -144,20 +134,29 @@ function SpecialDeals() {
         <h1 className="text-2xl font-semibold text-center">50% Off Buy Now! </h1>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 justify-center mt-8 px-4">
-        {randomProducts.length === 0 ? (
+        {specialDeals.length === 0 ? (
           <p className="text-center text-gray-700">Loading...</p>
         ) : (
-          randomProducts.map((product) => (
-            <div key={product.id} className="bg-white border border-gray-300 rounded-lg shadow-md p-4 flex flex-col items-center mb-4">
+          specialDeals.map((product) => (
+            <div key={product.product_id} className="bg-white border border-gray-300 rounded-lg shadow-md p-4 flex flex-col items-center mb-4">
               <img src={product.imageUrl} alt={product.name} className="w-24 h-24 rounded-full p-2 bg-gray-100" />
               <div className="text-center mt-2">
                 <h2 className="text-lg font-semibold text-gray-800">{product.name}</h2>
-                <p className="text-sm text-red-500 mt-1">Special Price: ${Number(product.price).toFixed(2)}</p>
+                <p className="text-sm text-gray-600 mt-1">
+                  {product.special_price ? (
+                    <>
+                      <span className="line-through">${Number(product.price).toFixed(2)}</span>{' '}
+                      <span className="text-red-500">${Number(product.special_price).toFixed(2)}</span>
+                    </>
+                  ) : (
+                    `$${Number(product.price).toFixed(2)}`
+                  )}
+                </p>
                 <input
                   type="number"
                   min="1"
-                  value={quantities[product.name] || ''}
-                  onChange={(e) => handleQuantityChange(product.name, parseInt(e.target.value))}
+                  value={quantities[product.product_id] || ''}
+                  onChange={(e) => handleQuantityChange(product.product_id, parseInt(e.target.value))}
                   className="mt-1 w-12 text-center border border-gray-300 rounded"
                 />
               </div>
@@ -169,21 +168,21 @@ function SpecialDeals() {
               </button>
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-md text-sm px-4 py-2 mt-2"
-                onClick={() => toggleReviewForm(product.id)}
+                onClick={() => toggleReviewForm(product.product_id)}
               >
                 Leave a Review
               </button>
-              {showReviewForm[product.id] && (
-                <ReviewForm productId={product.id} onReviewAdded={() => handleReviewAdded(product.id)} />
+              {showReviewForm[product.product_id] && (
+                <ReviewForm productId={product.product_id} onReviewAdded={() => handleReviewAdded(product.product_id)} />
               )}
               <button
                 className="bg-yellow-500 hover:bg-yellow-700 text-white font-medium rounded-md text-sm px-4 py-2 mt-2"
-                onClick={() => toggleReviewList(product.id)}
+                onClick={() => toggleReviewList(product.product_id)}
               >
-                {`See Reviews (${reviewCounts[product.id] || 0})`}
+                {`See Reviews (${reviewCounts[product.product_id] || 0})`}
               </button>
-              {showReviewList[product.id] && (
-                <ReviewList productId={product.id} />
+              {showReviewList[product.product_id] && (
+                <ReviewList productId={product.product_id} />
               )}
             </div>
           ))
@@ -191,7 +190,6 @@ function SpecialDeals() {
       </div>
     </div>
   );
-  
 }
 
 export default SpecialDeals;

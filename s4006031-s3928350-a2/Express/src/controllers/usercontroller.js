@@ -66,7 +66,7 @@ exports.createUser = async (req, res) => {
       username: req.body.username,
       email: req.body.email,
       password: hash,
-      created_at: new Date()
+      createdAt: new Date()
     });
 
     res.status(201).json(user);
