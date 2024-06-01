@@ -79,12 +79,29 @@ function Cart() {
       <div className="flex-grow container mx-auto p-4">
         <ul>
           {cart.map((item, index) => (
-            <li key={index} className="bg-gray-200 p-4 flex items-center justify-between mb-4 rounded-lg shadow-lg">
+            <li key={index} className="bg-gray-200 p-4 flex items-center justify-between mb-4 rounded-lg shadow-xl">
               <img src={item.product.imageUrl} alt={item.product.name} className="w-32 h-32 rounded-full" />
-              <div className="text-center">
-                <h3 className="text-lg font-semibold">{item.product.name}</h3>
-                <span className="block mt-2">Quantity: <input type="number" min="1" value={item.quantity} onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))} className="border rounded px-2 py-1" /></span>
-                <span className="block mt-2">Total Price: ${(item.product.price * item.quantity).toFixed(2)}</span>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="flex items-center">
+                  <h3 className="text-lg font-semibold">{item.product.name}</h3>
+                </div>
+                <div className="flex items-center">
+                  <span>
+                    Quantity: 
+                    <input 
+                      type="number" 
+                      min="1" 
+                      value={item.quantity} 
+                      onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))} 
+                      className="border rounded px-2 py-1 ml-2 w-12" 
+                    />
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <span>
+                    Total Price: ${(item.product.price * item.quantity).toFixed(2)}
+                  </span>
+                </div>
               </div>
               <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-4"
                 onClick={() => removeFromCart(item.id)}>Remove</button>
@@ -92,15 +109,18 @@ function Cart() {
           ))}
         </ul>
       </div>
-      <div className="text-center mt-4 p-4 bg-white">
-        <h2 className="text-xl font-semibold">Total: ${totalPrice.toFixed(2)}</h2>
-        <div>
+      <div className="container mx-auto p-4 bg-white rounded-lg shadow-md w-1/4 mb-4">
+        <h2 className="text-xl font-semibold text-center">Total: ${totalPrice.toFixed(2)}</h2>
+        <div className="flex justify-center mt-4">
           <button onClick={handleCheckout} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Checkout</button>
-          {showCheckout && <Checkout cart={cart} />}
         </div>
+        {showCheckout && <Checkout cart={cart} />}
       </div>
     </div>
   );
+  
+  
+  
 }
 
 export default Cart;
