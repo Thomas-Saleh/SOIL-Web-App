@@ -13,10 +13,10 @@
   top: 10%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: white; /* Optional: Set text color */
-  text-align: center; /* Optional: Center align text */
-  z-index: 1; /* Set z-index to place it in front of the image */
-  font-size: 60px; /* Adjust the font size as needed */
+  color: white; 
+  text-align: center; 
+  z-index: 1; 
+  font-size: 60px; 
 }
 
 .description {
@@ -24,9 +24,9 @@
   top: 17%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: white; /* Optional: Set text color */
-  text-align: center; /* Optional: Center align text */
-  z-index: 1; /* Set z-index to place it in front of the image */
+  color: white; 
+  text-align: center; 
+  z-index: 1; 
 }
 
 
@@ -129,7 +129,6 @@
 
 .background-image {
   width: 100%;
-  /* Remove or adjust the opacity as needed */
 }
 
 .tips-overlay {
@@ -138,12 +137,12 @@
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 8px; /* Adjust padding as needed */
+  padding: 8px; 
 }
 
 /* Additional styling for list items */
 .vegetable-tips-container ul li {
-  background-color: #52ac48; /* This is the green color from your original code */
+  background-color: #52ac48; 
   margin: 0.5em 0;
   padding: 0.5em;
   border-radius: 0.5em;

@@ -116,7 +116,7 @@ function Profile() {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="w-auto p-8 bg-white rounded-lg shadow-lg  mx-25">
+      <div className="w-auto p-8 rounded-lg shadow-lg  mx-25">
         {showSuccessMessage && (
           <div className="success-message">
             Your changes have been saved successfully!
@@ -181,7 +181,7 @@ function Profile() {
             </div>
           </div>
         ) : (
-          <div className='Display'>
+          <div className='Display bg-f7a072'>
             <p className="text-xl mb-4 left 5"><strong>{userDetails.username}</strong></p>
             <p className="text-lg mb-2"><strong>Email:</strong> {userDetails.email}</p>
             <p className="text-lg mb-2"><strong>Health Goals:</strong> {userDetails.health_goals}</p>
