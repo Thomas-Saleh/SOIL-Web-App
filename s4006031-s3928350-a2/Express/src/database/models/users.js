@@ -37,6 +37,7 @@ module.exports = (sequelize, DataTypes) =>
       health_goals: {
         type: DataTypes.ENUM('weight loss', 'muscle gain', 'maintenance', 'sleep 7 to 9 hours', 'eat nutritiously')
       },
+      
     }, {
       timestamps: true
     });

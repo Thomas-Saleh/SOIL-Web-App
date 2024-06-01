@@ -45,6 +45,8 @@ db.cart.belongsTo(db.product, { foreignKey: 'product_id' });
 db.user.belongsToMany(db.user, { as: 'Followers', through: db.follow, foreignKey: 'follower_id' });
 db.user.belongsToMany(db.user, { as: 'Following', through: db.follow, foreignKey: 'following_id' });
 
+db.specialDeal.belongsTo(db.product, { foreignKey: 'product_id'});
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

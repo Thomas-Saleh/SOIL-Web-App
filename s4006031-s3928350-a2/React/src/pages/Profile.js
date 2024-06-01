@@ -184,7 +184,7 @@ function Profile() {
           <div>
             <p className="text-2xl mb-4"><strong>Hello, {userDetails.username}!</strong></p>
             <p className="text-lg mb-2"><strong>Email:</strong> {userDetails.email}</p>
-            <p className="text-lg mb-2"><strong>Date of Joining:</strong> {formatDate(userDetails.created_at)}</p>
+            <p className="text-lg mb-2"><strong>Date of Joining:</strong> {formatDate(userDetails.createdAt)}</p>
             <p className="text-lg mb-2"><strong>Age:</strong> {userDetails.age}</p>
             <p className="text-lg mb-2"><strong>Weight:</strong> {userDetails.weight} kg</p>
             <p className="text-lg mb-2"><strong>Height:</strong> {userDetails.height} cm</p>

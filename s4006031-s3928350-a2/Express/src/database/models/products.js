@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) =>
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false
       },
+      special_price: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: true,
+        defaultValue: null
+      },
       imageUrl: {
         type: DataTypes.STRING,
         allowNull: true

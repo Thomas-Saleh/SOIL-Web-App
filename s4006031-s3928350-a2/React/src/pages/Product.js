@@ -1,38 +1,34 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from 'axios';
-import { addCartItem, getAllReviewsForProduct } from "../data/repository"; // Import the addCartItem function
-import { decodeJWT } from '../utils/jwtUtils'; // Import the custom decode function
+import { getAllReviewsForProduct } from "../data/repository";
+import { decodeJWT } from '../utils/jwtUtils';
 import ReviewForm from './ReviewForm';
 import ReviewList from './ReviewList';
 
-
-function Product() {
-  const [vegetables, setVegetables] = useState([]);
+function Products() {
+  const [products, setProducts] = useState([]);
   const [quantities, setQuantities] = useState({});
-  const [reviews, setReviews] = useState({}); // Store reviews for each product
+  const [reviews, setReviews] = useState({});
   const [showReviewForm, setShowReviewForm] = useState({});
   const [showReviewList, setShowReviewList] = useState({});
   const [reviewCounts, setReviewCounts] = useState({});
 
-  // Define fetchVegetables function
-  const fetchVegetables = async () => {
+  const fetchProducts = async () => {
     try {
       const response = await axios.get('http://localhost:3000/api/products');
-      setVegetables(response.data);
-      // Fetch review counts for each product
+      setProducts(response.data);
+
       const reviewCountsData = {};
       for (const product of response.data) {
         const reviewsData = await getAllReviewsForProduct(product.id);
         reviewCountsData[product.id] = reviewsData.length;
       }
       setReviewCounts(reviewCountsData);
-
     } catch (error) {
-      console.error("Failed to fetch vegetables:", error);
+      console.error("Failed to fetch products:", error);
     }
   };
-    
-  // Define fetchReviews function
+
   const fetchReviews = useCallback(async (productId) => {
     try {
       const reviewsData = await getAllReviewsForProduct(productId);
@@ -45,51 +41,47 @@ function Product() {
     }
   }, []);
 
-  // Fetch vegetables from the database
   useEffect(() => {
-    fetchVegetables();
+    fetchProducts();
   }, []);
 
-  // Handle quantity change
-  const handleQuantityChange = (vegetableName, quantity) => {
+  const handleQuantityChange = (productId, quantity) => {
     setQuantities((prevState) => ({
       ...prevState,
-      [vegetableName]: quantity,
+      [productId]: quantity,
     }));
   };
 
-  // Add a vegetable to the cart
-  const addToCart = async (vegetable) => {
-    const sessionToken = localStorage.getItem("sessionToken");
-    console.log("Session token:", sessionToken);
-
+  const addToCart = async (product) => {
+    const sessionToken = localStorage.getItem('sessionToken');
     if (!sessionToken) {
-      alert("You must be logged in to add items to the cart.");
-      window.location.href = "/sign-in";
+      alert('You must be logged in to add items to the cart.');
+      window.location.href = '/sign-in';
       return;
     }
 
     const decodedToken = decodeJWT(sessionToken);
-    console.log("Decoded token:", decodedToken);
-
     if (!decodedToken) {
       alert("Invalid session token.");
       return;
     }
 
-    const user_id = decodedToken.user_id;
-    const quantity = quantities[vegetable.name] || 1;
-    console.log(`Adding ${quantity} ${vegetable.name} to cart`);
+    const quantity = quantities[product.id] || 1;
+    console.log(`Adding ${quantity} ${product.name} to cart`);
 
     try {
-      const cartItem = await addCartItem({
-        user_id,
-        product_id: vegetable.id,
-        quantity
+      const cartItem = await axios.post('http://localhost:3000/api/cart', {
+        product_id: product.id,
+        quantity,
+        price: product.special_price || product.price // Using the special price if available
+      }, {
+        headers: {
+          'Authorization': `Bearer ${sessionToken}`
+        }
       });
 
-      console.log("Item added to cart:", cartItem);
-      alert(`${vegetable.name} added to cart!`);
+      console.log("Item added to cart:", cartItem.data);
+      alert(`${product.name} added to cart!`);
     } catch (error) {
       console.error("Failed to add item to cart:", error);
       alert("Failed to add item to cart. Please try again.");
@@ -122,8 +114,6 @@ function Product() {
     }));
   };
 
-
-  // Render the vegetable market
   return (
     <div className="box bg-F7B787">
       <div className="bg-green-800 text-white py-4">
@@ -132,43 +122,52 @@ function Product() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 justify-center mt-8 px-4">
-        {vegetables.map((vegetable) => (
-          <div key={vegetable.id} className="bg-white border border-gray-300 rounded-lg shadow-md p-4 flex flex-col items-center mb-4">
-            <img src={vegetable.imageUrl} alt={vegetable.name} className="w-24 h-24 rounded-full p-2 bg-gray-100" />
+        {products.map((product) => (
+          <div key={product.id} className="bg-white border border-gray-300 rounded-lg shadow-md p-4 flex flex-col items-center mb-4">
+            <img src={product.imageUrl} alt={product.name} className="w-24 h-24 rounded-full p-2 bg-gray-100" />
             <div className="text-center mt-2">
-              <h2 className="text-lg font-semibold text-gray-800">{vegetable.name}</h2>
-              <p className="text-sm text-gray-600 mt-1">Price: ${Number(vegetable.price).toFixed(2)}</p>
+              <h2 className="text-lg font-semibold text-gray-800">{product.name}</h2>
+              <p className="text-sm text-gray-600 mt-1">
+                {product.special_price ? (
+                  <>
+                    <span className="line-through">${Number(product.price).toFixed(2)}</span>{' '}
+                    <span className="text-red-500">${Number(product.special_price).toFixed(2)}</span>
+                  </>
+                ) : (
+                  `$${Number(product.price).toFixed(2)}`
+                )}
+              </p>
               <input
                 type="number"
                 min="1"
-                value={quantities[vegetable.name] || ""}
-                onChange={(e) => handleQuantityChange(vegetable.name, parseInt(e.target.value))}
+                value={quantities[product.id] || ""}
+                onChange={(e) => handleQuantityChange(product.id, parseInt(e.target.value))}
                 className="mt-1 w-12 text-center border border-gray-300 rounded"
               />
             </div>
             <button
               className="bg-green-500 hover:bg-green-700 text-white font-medium rounded-md text-sm px-4 py-2 mt-2"
-              onClick={() => addToCart(vegetable)}
+              onClick={() => addToCart(product)}
             >
               Add to Cart
             </button>
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-md text-sm px-4 py-2 mt-2"
-              onClick={() => toggleReviewForm(vegetable.id)}
+              onClick={() => toggleReviewForm(product.id)}
             >
               Leave a Review
             </button>
-            {showReviewForm[vegetable.id] && (
-              <ReviewForm productId={vegetable.id} onReviewAdded={() => handleReviewAdded(vegetable.id)} />
+            {showReviewForm[product.id] && (
+              <ReviewForm productId={product.id} onReviewAdded={() => handleReviewAdded(product.id)} />
             )}
             <button
               className="bg-yellow-500 hover:bg-yellow-700 text-white font-medium rounded-md text-sm px-4 py-2 mt-2"
-              onClick={() => toggleReviewList(vegetable.id)}
+              onClick={() => toggleReviewList(product.id)}
             >
-              {`See Reviews (${reviewCounts[vegetable.id] || 0})`}
+              {`See Reviews (${reviewCounts[product.id] || 0})`}
             </button>
-            {showReviewList[vegetable.id] && (
-              <ReviewList productId={vegetable.id} reviews={reviews[vegetable.id] || []} />
+            {showReviewList[product.id] && (
+              <ReviewList productId={product.id} reviews={reviews[product.id] || []} />
             )}
           </div>
         ))}
@@ -177,4 +176,4 @@ function Product() {
   );
 }
 
-export default Product;
+export default Products;

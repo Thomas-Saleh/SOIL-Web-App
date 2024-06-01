@@ -1,4 +1,5 @@
 const db = require("../database/index.js");
+const { decodeJWT } = require('../utils/jwtUtils');
 
 // Get the cart for a user.
 exports.getCart = async (req, res) => {
@@ -20,30 +21,60 @@ exports.getCart = async (req, res) => {
 // Add a product to the cart.
 exports.addToCart = async (req, res) => {
   try {
-    const { user_id, product_id, quantity } = req.body;
+    const { product_id, quantity, price } = req.body;
 
-    if (!user_id || !product_id || !quantity) {
-      console.error("Missing required fields:", req.body);
-      return res.status(400).json({ error: "Missing required fields" });
+    // Check if the authorization header is present
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ message: 'Authorization header is missing' });
     }
 
-    console.log("Creating cart item with:", { user_id, product_id, quantity });
+    // Split the authorization header to extract the token
+    const token = authHeader.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ message: 'Token is missing from authorization header' });
+    }
 
-    const cartItem = await db.cart.create({
-      user_id,
-      product_id,
-      quantity
-    });
+    const decodedToken = decodeJWT(token);
+    if (!decodedToken) {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
 
-    console.log("Cart item created successfully:", cartItem);
-    res.json(cartItem);
+    const user_id = decodedToken.user_id;
+
+    // Validate user_id exists
+    const user = await db.user.findByPk(user_id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Check if there is a special deal for this product
+    const specialDeal = await db.specialDeal.findOne({ where: { product_id } });
+    const finalPrice = specialDeal ? specialDeal.price : price;
+
+    // Check if the item is already in the cart
+    let cartItem = await db.cart.findOne({ where: { user_id, product_id } });
+
+    if (cartItem) {
+      // If the item is already in the cart, update its quantity
+      cartItem.quantity += quantity;
+      await cartItem.save();
+    } else {
+      // If the item is not in the cart, create a new cart item
+      cartItem = await db.cart.create({
+        user_id,
+        product_id,
+        quantity,
+        price: finalPrice
+      });
+    }
+
+    res.status(201).json(cartItem);
   } catch (error) {
-    console.error("Error adding to cart:", error.message);
-    console.error("Stack trace:", error.stack);
-    res.status(500).json({ error: "Failed to add to cart" });
+    console.error("Error adding to cart:", error);
+    res.status(500).json({ message: error.message });
   }
 };
-
 
 // Update the quantity of a product in the cart.
 exports.updateCart = async (req, res) => {
