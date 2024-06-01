@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { removeUser } from '../data/repository';
 
 function Navbar() {
   const [productDropdown, setProductDropdown] = useState(false);
@@ -7,19 +8,28 @@ function Navbar() {
   const [hoverTimeout, setHoverTimeout] = useState(null);
   const productRef = useRef(null);
   const accountRef = useRef(null);
+  const navigate = useNavigate();
 
-  // Function to show the dropdown and clear any existing timeout
   const showDropdown = (setDropdown) => {
     clearTimeout(hoverTimeout);
     setDropdown(true);
   };
 
-  // Function to hide the dropdown after a short delay
   const hideDropdown = (setDropdown) => {
     const timeoutId = setTimeout(() => {
       setDropdown(false);
     }, 100); // 100ms delay before hiding the dropdown
     setHoverTimeout(timeoutId);
+  };
+
+  const clearShoppingCart = () => {
+    localStorage.removeItem('cart');
+  };
+  
+  const handleLogout = () => {
+    clearShoppingCart();
+    localStorage.removeItem('sessionToken');
+    window.location.href = '/'; // Redirect to homepage
   };
 
   useEffect(() => {
@@ -56,8 +66,6 @@ function Navbar() {
               onMouseEnter={() => showDropdown(setProductDropdown)}
               onMouseLeave={() => hideDropdown(setProductDropdown)}
             >
-              
-            
               <button
                 className="flex items-center justify-between text-gray-900 hover:text-blue-700 py-2 px-3 rounded focus:outline-none"
               >
@@ -112,30 +120,31 @@ function Navbar() {
                 >
                   <ul className="py-2 text-sm text-gray-700">
                     <li>
-                      <Link to="/sign-in" className="block px-4 py-2 hover
-                      hover:bg-gray-100">Sign In</Link>
-                      </li>
-                      <li>
-                        <Link to="/sign-up" className="block px-4 py-2 hover:bg-gray-100">Sign Up</Link>
-                      </li>
-                      <li>
-                        <Link to="/user-profile" className="block px-4 py-2 hover:bg-gray-100">Profile</Link>
-                      </li>
-                    </ul>
-                  </div>
-                )}
-              </li>
-              <li>
-                <Link to="/cart" className="text-gray-900 hover:text-blue-700 py-2 px-3 rounded">
-                  <img src="trolley-cart.png" className="h-6" alt="Shopping Cart Icon" />
-                </Link>
-              </li>
-            </ul>
-          </div>
+                      <Link to="/sign-in" className="block px-4 py-2 hover:bg-gray-100">Sign In</Link>
+                    </li>
+                    <li>
+                      <Link to="/sign-up" className="block px-4 py-2 hover:bg-gray-100">Sign Up</Link>
+                    </li>
+                    <li>
+                      <Link to="/user-profile" className="block px-4 py-2 hover:bg-gray-100">Profile</Link>
+                    </li>
+                    <li>
+                      <button onClick={handleLogout} className="block w-full text-left px-4 py-2 hover:bg-gray-100">Logout</button>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </li>
+            <li>
+              <Link to="/cart" className="text-gray-900 hover:text-blue-700 py-2 px-3 rounded">
+                <img src="trolley-cart.png" className="h-6" alt="Shopping Cart Icon" />
+              </Link>
+            </li>
+          </ul>
         </div>
-      </nav>
-    );
-  }
-  
-  export default Navbar;
-  
+      </div>
+    </nav>
+  );
+}
+
+export default Navbar;

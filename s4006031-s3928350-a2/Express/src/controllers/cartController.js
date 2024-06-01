@@ -23,6 +23,12 @@ exports.addToCart = async (req, res) => {
   try {
     const { product_id, quantity, price } = req.body;
 
+    // Check if there are any users in the database
+    const usersCount = await db.user.count();
+    if (usersCount === 0) {
+      return res.status(400).json({ message: 'No users signed up yet. You need to be signed in to add items to the cart.' });
+    }
+
     // Check if the authorization header is present
     const authHeader = req.headers.authorization;
     if (!authHeader) {

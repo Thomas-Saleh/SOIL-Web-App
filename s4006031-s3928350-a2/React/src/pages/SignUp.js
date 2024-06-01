@@ -25,6 +25,7 @@ function Signup() {
         const response = await createUser(userDetails);
         if (response) {
           setIsSubmitted(true);
+          alert('Registration successful! You will be redirected to the sign-in page shortly.'); // Popup success message
           setTimeout(() => {
             navigate('/sign-in');
           }, 2000);
@@ -68,14 +69,6 @@ function Signup() {
     return true;
   };
 
-  const renderSuccessMessage = () => {
-    return (
-      <div className="success-message text-white">
-        Registration successful! You will be redirected to the sign-in page shortly.
-      </div>
-    );
-  };
-
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#F9E8D9]">
       <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
@@ -106,7 +99,7 @@ function Signup() {
             />
           </div>
           <div>
-          <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
             <input 
               type="password" 
               name="password" 
@@ -139,7 +132,7 @@ function Signup() {
             Already have an account? <Link to="/sign-in" className="text-[#EE7214] hover:underline dark:text-[#EE7214]">Sign In</Link>
           </div>
           {errorMessage && <div className="text-red-500 text-sm">{errorMessage}</div>}
-          {isSubmitted && renderSuccessMessage()}
+          {isSubmitted && <div className="text-green-500 text-sm">Registration successful! You will be redirected to the sign-in page shortly.</div>}
         </form>
       </div>
     </div>
@@ -147,4 +140,3 @@ function Signup() {
 }
 
 export default Signup;
-

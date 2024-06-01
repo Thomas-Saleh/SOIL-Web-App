@@ -104,7 +104,10 @@ exports.updateSpecialPrices = async (req, res) => {
     const { specialPrices } = req.body;
 
     // Revert previous special prices to their original prices
-    await db.product.update({ price: db.Sequelize.literal('special_price'), special_price: null }, {
+    await db.product.update({ 
+      price: db.Sequelize.literal('CASE WHEN special_price IS NOT NULL THEN price ELSE price END'),
+      special_price: null 
+    }, {
       where: {
         special_price: { [db.Sequelize.Op.ne]: null }
       }
