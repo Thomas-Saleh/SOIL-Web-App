@@ -78,14 +78,14 @@ function Cart() {
       </div>
       <ul>
         {cart.map((item, index) => (
-          <li key={index} className="bg-gray-200 p-4 flex flex-col items-center justify-between">
+          <li key={index} className="bg-gray-200 p-4 flex items-center justify-between mb-4">
             <img src={item.product.imageUrl} alt={item.product.name} className="w-32 h-32 rounded-full" />
             <div className="text-center">
               <h3 className="text-lg font-semibold">{item.product.name}</h3>
-              <span>Quantity: <input type="number" min="1" value={item.quantity} onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))} /></span>
-              <span>Total Price: ${(item.product.price * item.quantity).toFixed(2)}</span>
+              <span className="block mt-2">Quantity: <input type="number" min="1" value={item.quantity} onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))} className="border rounded px-2 py-1" /></span>
+              <span className="block mt-2">Total Price: ${(item.product.price * item.quantity).toFixed(2)}</span>
             </div>
-            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-2"
+            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-4"
               onClick={() => removeFromCart(item.id)}>Remove</button>
           </li>
         ))}
