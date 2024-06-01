@@ -17,33 +17,33 @@ function Home() {
         </div>
       </header>
 
-      <section className="py-8 bg-white">
-        <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-4">Our Values</h2>
-          <p>At SOIL Organic Food Grocer, we are committed to:</p>
-          <ul className="list-disc list-inside mt-2">
-            <li>Providing the highest quality organic products.</li>
-            <li>Supporting sustainable and ethical farming practices.</li>
-            <li>Promoting health and wellness in our community.</li>
-            <li>Encouraging a balanced and nutritious diet.</li>
-            <li>Minimizing our environmental footprint.</li>
-          </ul>
-        </div>
-      </section>
+      <div className="flex justify-center mt-8">
+        <section className="w-5/6 bg-white rounded-lg overflow-hidden shadow-md mx-4 mb-5"> 
+          <div className="px-6 py-4">
+            <h2 className="text-xl font-bold mb-2">Premium Quality</h2>
+            <p>We ensure the highest quality products to offer you the finest organic experience.</p>
+          </div>
+          <img src="Premium Vegetable.jpeg" alt="Premium Quality" className="w-full" />
+        </section>
+      </div>
 
-      <section className="py-8 bg-gray-50">
-        <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-4">Our Mission</h2>
-          <p>Our mission is to provide:</p>
-          <ul className="list-disc list-inside mt-2">
-            <li>Accessible and affordable organic food options.</li>
-            <li>Educational resources on nutrition and healthy living.</li>
-            <li>A welcoming and inclusive shopping experience.</li>
-            <li>Support for local farmers and producers.</li>
-            <li>Innovative solutions for a sustainable future.</li>
-          </ul>
-        </div>
-      </section>
+      <div className="flex justify-center mt-8">
+        <section className="w-1/3 bg-white rounded-lg overflow-hidden shadow-md mx-4 mb-5"> {/* Adjusted width */}
+          <div className="px-6 py-4">
+            <h2 className="text-xl font-bold mb-2">Our Mission</h2>
+            <p>Our mission is to provide accessible organic food options, educational resources, and support for local producers.</p>
+          </div>
+          <img src="Happy Eating.jpeg" alt="Our Mission" className="w-full" />
+        </section>
+
+        <section className="w-1/3 bg-white rounded-lg overflow-hidden shadow-md mx-4 mb-5"> {/* Adjusted width */}
+          <div className="px-6 py-4">
+            <h2 className="text-xl font-bold mb-2">Our Values</h2>
+            <p>We are committed to providing the highest quality organic products, supporting sustainable farming practices, promoting community health and wellness, encouraging balanced nutrition, and minimizing our environmental footprint.</p>
+          </div>
+          <img src="Our Values.jpeg" alt="Our Values" className="w-full" />
+        </section>
+      </div>
     </div>
   );
 }
