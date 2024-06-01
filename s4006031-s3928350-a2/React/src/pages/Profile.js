@@ -116,7 +116,7 @@ function Profile() {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="max-w-md p-8 bg-white rounded-lg shadow-lg text-center">
+      <div className="w-auto p-8 bg-white rounded-lg shadow-lg  mx-25">
         {showSuccessMessage && (
           <div className="success-message">
             Your changes have been saved successfully!
@@ -181,16 +181,17 @@ function Profile() {
             </div>
           </div>
         ) : (
-          <div>
-            <p className="text-2xl mb-4"><strong>Hello, {userDetails.username}!</strong></p>
+          <div className='Display'>
+            <p className="text-xl mb-4 left 5"><strong>{userDetails.username}</strong></p>
             <p className="text-lg mb-2"><strong>Email:</strong> {userDetails.email}</p>
+            <p className="text-lg mb-2"><strong>Health Goals:</strong> {userDetails.health_goals}</p>
+            <p>===========================================================================================</p>
             <p className="text-lg mb-2"><strong>Date of Joining:</strong> {formatDate(userDetails.createdAt)}</p>
             <p className="text-lg mb-2"><strong>Age:</strong> {userDetails.age}</p>
             <p className="text-lg mb-2"><strong>Weight:</strong> {userDetails.weight} kg</p>
             <p className="text-lg mb-2"><strong>Height:</strong> {userDetails.height} cm</p>
             <p className="text-lg mb-2"><strong>Activity Levels:</strong> {userDetails.activity_level}</p>
             <p className="text-lg mb-2"><strong>Dietary Preferences:</strong> {userDetails.dietary_preferences}</p>
-            <p className="text-lg mb-2"><strong>Health Goals:</strong> {userDetails.health_goals}</p>
             <div className="btn-group flex justify-around mt-4">
               <button onClick={handleEdit} className="btn-primary">Edit</button>
               <button onClick={handleDelete} className="btn-secondary">Delete Account</button>
