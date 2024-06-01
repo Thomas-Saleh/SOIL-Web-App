@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { removeUser } from '../data/repository';
+import { Link } from "react-router-dom";
 
 function Navbar() {
   const [productDropdown, setProductDropdown] = useState(false);
@@ -8,7 +7,6 @@ function Navbar() {
   const [hoverTimeout, setHoverTimeout] = useState(null);
   const productRef = useRef(null);
   const accountRef = useRef(null);
-  const navigate = useNavigate();
 
   const showDropdown = (setDropdown) => {
     clearTimeout(hoverTimeout);
@@ -25,7 +23,7 @@ function Navbar() {
   const clearShoppingCart = () => {
     localStorage.removeItem('cart');
   };
-  
+
   const handleLogout = () => {
     clearShoppingCart();
     localStorage.removeItem('sessionToken');

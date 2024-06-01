@@ -84,7 +84,6 @@ function SpecialDeals() {
       const cartItem = await axios.post('http://localhost:3000/api/cart', {
         product_id: product.product_id,
         quantity,
-        price: product.special_price || product.price // Using the special price if available
       }, {
         headers: {
           'Authorization': `Bearer ${sessionToken}`

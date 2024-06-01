@@ -18,24 +18,15 @@ exports.getCart = async (req, res) => {
   }
 };
 
-// Add a product to the cart.
 exports.addToCart = async (req, res) => {
   try {
-    const { product_id, quantity, price } = req.body;
+    const { product_id, quantity } = req.body;
 
-    // Check if there are any users in the database
-    const usersCount = await db.user.count();
-    if (usersCount === 0) {
-      return res.status(400).json({ message: 'No users signed up yet. You need to be signed in to add items to the cart.' });
-    }
-
-    // Check if the authorization header is present
     const authHeader = req.headers.authorization;
     if (!authHeader) {
       return res.status(401).json({ message: 'Authorization header is missing' });
     }
 
-    // Split the authorization header to extract the token
     const token = authHeader.split(' ')[1];
     if (!token) {
       return res.status(401).json({ message: 'Token is missing from authorization header' });
@@ -51,19 +42,25 @@ exports.addToCart = async (req, res) => {
     // Validate user_id exists
     const user = await db.user.findByPk(user_id);
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: 'Sign in to add items to cart!' });
     }
 
-    // Check if there is a special deal for this product
-    const specialDeal = await db.specialDeal.findOne({ where: { product_id } });
-    const finalPrice = specialDeal ? specialDeal.price : price;
+    // Fetch the product to get its special_price if it exists
+    const product = await db.product.findByPk(product_id);
+
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    const finalPrice = product.special_price !== null ? product.special_price : product.price;
 
     // Check if the item is already in the cart
     let cartItem = await db.cart.findOne({ where: { user_id, product_id } });
 
     if (cartItem) {
-      // If the item is already in the cart, update its quantity
+      // If the item is already in the cart, update its quantity and price
       cartItem.quantity += quantity;
+      cartItem.price = finalPrice; // Ensure the special price is used
       await cartItem.save();
     } else {
       // If the item is not in the cart, create a new cart item
@@ -81,6 +78,7 @@ exports.addToCart = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 // Update the quantity of a product in the cart.
 exports.updateCart = async (req, res) => {

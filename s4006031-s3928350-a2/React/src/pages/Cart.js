@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { getCartItems, updateCartItem, removeCartItem } from '../data/repository'; // Import the necessary functions
-import { decodeJWT } from '../utils/jwtUtils'; // Import the custom decode function
+import { getCartItems, updateCartItem, removeCartItem } from '../data/repository';
+import { decodeJWT } from '../utils/jwtUtils';
 import Checkout from './Checkout';
 
 function Cart() {
@@ -9,13 +9,11 @@ function Cart() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    // Check if the user is logged in
     const sessionToken = localStorage.getItem('sessionToken');
     if (sessionToken) {
       setIsLoggedIn(true);
       const decodedToken = decodeJWT(sessionToken);
       const userId = decodedToken.user_id;
-      // Fetch cart items from the backend
       getCartItems(userId).then(setCart).catch(console.error);
     }
   }, []);
@@ -24,7 +22,7 @@ function Cart() {
     const updatedCart = cart.map(item => {
       if (item.id === itemId) {
         const updatedItem = { ...item, quantity: newQuantity };
-        updateCartItem(itemId, newQuantity); // Update item in the backend
+        updateCartItem(itemId, newQuantity);
         return updatedItem;
       }
       return item;
@@ -34,7 +32,7 @@ function Cart() {
 
   const removeFromCart = (itemId) => {
     const updatedCart = cart.filter(item => item.id !== itemId);
-    removeCartItem(itemId); // Remove item from the backend
+    removeCartItem(itemId);
     setCart(updatedCart);
   };
 
@@ -42,7 +40,7 @@ function Cart() {
     setShowCheckout(true);
   };
 
-  const totalPrice = cart.reduce((total, item) => total + item.product.price * item.quantity, 0); // Calculate total price
+  const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
   if (!isLoggedIn) {
     return (
@@ -99,7 +97,7 @@ function Cart() {
                 </div>
                 <div className="flex items-center">
                   <span>
-                    Total Price: ${(item.product.price * item.quantity).toFixed(2)}
+                    Total Price: ${(item.price * item.quantity).toFixed(2)}
                   </span>
                 </div>
               </div>
@@ -118,9 +116,6 @@ function Cart() {
       </div>
     </div>
   );
-  
-  
-  
 }
 
 export default Cart;
