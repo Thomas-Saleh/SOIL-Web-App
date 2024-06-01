@@ -72,25 +72,27 @@ function Cart() {
   }
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <div className="bg-green-500 text-white py-4">
         <h1 className="text-3xl font-semibold text-center">Shopping Cart</h1>
       </div>
-      <ul>
-        {cart.map((item, index) => (
-          <li key={index} className="bg-gray-200 p-4 flex items-center justify-between mb-4">
-            <img src={item.product.imageUrl} alt={item.product.name} className="w-32 h-32 rounded-full" />
-            <div className="text-center">
-              <h3 className="text-lg font-semibold">{item.product.name}</h3>
-              <span className="block mt-2">Quantity: <input type="number" min="1" value={item.quantity} onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))} className="border rounded px-2 py-1" /></span>
-              <span className="block mt-2">Total Price: ${(item.product.price * item.quantity).toFixed(2)}</span>
-            </div>
-            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-4"
-              onClick={() => removeFromCart(item.id)}>Remove</button>
-          </li>
-        ))}
-      </ul>
-      <div className="text-center mt-4">
+      <div className="flex-grow container mx-auto p-4">
+        <ul>
+          {cart.map((item, index) => (
+            <li key={index} className="bg-gray-200 p-4 flex items-center justify-between mb-4 rounded-lg shadow-lg">
+              <img src={item.product.imageUrl} alt={item.product.name} className="w-32 h-32 rounded-full" />
+              <div className="text-center">
+                <h3 className="text-lg font-semibold">{item.product.name}</h3>
+                <span className="block mt-2">Quantity: <input type="number" min="1" value={item.quantity} onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))} className="border rounded px-2 py-1" /></span>
+                <span className="block mt-2">Total Price: ${(item.product.price * item.quantity).toFixed(2)}</span>
+              </div>
+              <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-4"
+                onClick={() => removeFromCart(item.id)}>Remove</button>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="text-center mt-4 p-4 bg-white">
         <h2 className="text-xl font-semibold">Total: ${totalPrice.toFixed(2)}</h2>
         <div>
           <button onClick={handleCheckout} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Checkout</button>
