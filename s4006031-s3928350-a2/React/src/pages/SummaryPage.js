@@ -5,7 +5,7 @@ function SummaryPage({ orderSummary }) {
 
   return (
     <div>
-      <div className="bg-green-500 text-white py-4">
+      <div className="bg-green-500 text-white py-4 mt-4 rounded-lg">
         <h1 className="text-3xl font-semibold text-center">Order Summary</h1>
       </div>
       <div className="text-center mt-4">
@@ -14,12 +14,12 @@ function SummaryPage({ orderSummary }) {
         ) : (
           <ul>
             {orderSummary.map((item, index) => (
-              <li key={index} className="bg-gray-200 p-4 flex flex-col items-center justify-between">
+              <li key={index} className="bg-gray-200 p-4 flex flex-col items-center justify-between rounded-xl">
                 <img src={item.product.imageUrl} alt={item.product.name} className="w-32 h-32 rounded-full" />
                 <div className="text-center">
                   <h3 className="text-lg font-semibold">{item.product.name}</h3>
-                  <span>Quantity: {item.quantity}</span>
-                  <span>Total Price: ${(item.product.price * item.quantity).toFixed(2)}</span>
+                  <span className='mx-5'>Quantity: {item.quantity}</span>
+                  <span className='mx-5'>Total Price: ${(item.product.price * item.quantity).toFixed(2)}</span>
                 </div>
               </li>
             ))}

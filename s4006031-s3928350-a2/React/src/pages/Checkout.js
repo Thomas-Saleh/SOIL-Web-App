@@ -86,11 +86,8 @@ function Checkout({ cart }) {
 
   return (
     <div>
-      <div className="bg-green-500 text-white py-4">
-        <h1 className="text-3xl font-semibold text-center">Checkout</h1>
-      </div>
       {!isPurchaseSuccessful ? (
-        <div>
+        <div className="mt-4"> 
           <div className="text-center mt-4">
             <input
               type="text"
@@ -124,6 +121,7 @@ function Checkout({ cart }) {
       )}
     </div>
   );
+  
 }
 
 export default Checkout;
