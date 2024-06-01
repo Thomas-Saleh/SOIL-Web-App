@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // Import the Link component
-import { verifyUser, getUser, setUser } from '../data/repository'; 
-import { decodeJWT } from '../utils/jwtUtils'; // Import the custom decode function
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { verifyUser, getUser, setUser } from '../data/repository';
+import { decodeJWT } from '../utils/jwtUtils';
 
 function SignIn() {
   const [loginDetails, setLoginDetails] = useState({
@@ -10,6 +10,7 @@ function SignIn() {
   });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginError, setLoginError] = useState('');
+  const navigate = useNavigate(); // Initialize navigate
 
   useEffect(() => {
     const sessionToken = localStorage.getItem('sessionToken');
@@ -33,9 +34,11 @@ function SignIn() {
       if (response && response.token) {
         localStorage.setItem('sessionToken', response.token);
         const decodedToken = decodeJWT(response.token);
-        setUser(decodedToken); // Store decoded user details in localStorage
+        setUser(decodedToken);
         setIsLoggedIn(true);
         setLoginError('');
+        alert('Login successful! You are now logged in.'); // Popup success message
+        navigate('/'); // Redirect to homepage
       } else {
         setLoginError('Invalid email or password.');
       }

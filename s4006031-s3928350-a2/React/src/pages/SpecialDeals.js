@@ -95,7 +95,7 @@ function SpecialDeals() {
       alert(`${product.name} added to cart!`);
     } catch (error) {
       console.error("Failed to add item to cart:", error);
-      alert("Failed to add item to cart. Please try again.");
+      alert(error.response?.data?.message || "Failed to add item to cart. Please try again.");
     }
   };
 
