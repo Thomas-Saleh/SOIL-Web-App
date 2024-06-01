@@ -181,17 +181,23 @@ function Profile() {
             </div>
           </div>
         ) : (
-          <div className='Display bg-f7a072'>
-            <p className="text-xl mb-4 left 5"><strong>{userDetails.username}</strong></p>
-            <p className="text-lg mb-2"><strong>Email:</strong> {userDetails.email}</p>
-            <p className="text-lg mb-2"><strong>Health Goals:</strong> {userDetails.health_goals}</p>
+          <div className='bg-f7a072'>
+            <div>
+              <p className="text-xl mb-4 left 5"><strong>{userDetails.username}</strong></p>
+              <p className="text-lg mb-2"><strong>Email:</strong> {userDetails.email}</p>
+              <p className="text-lg mb-2"><strong>Health Goals:</strong> {userDetails.health_goals}</p>
+            </div>
             <p>===========================================================================================</p>
-            <p className="text-lg mb-2"><strong>Date of Joining:</strong> {formatDate(userDetails.createdAt)}</p>
-            <p className="text-lg mb-2"><strong>Age:</strong> {userDetails.age}</p>
-            <p className="text-lg mb-2"><strong>Weight:</strong> {userDetails.weight} kg</p>
-            <p className="text-lg mb-2"><strong>Height:</strong> {userDetails.height} cm</p>
-            <p className="text-lg mb-2"><strong>Activity Levels:</strong> {userDetails.activity_level}</p>
-            <p className="text-lg mb-2"><strong>Dietary Preferences:</strong> {userDetails.dietary_preferences}</p>
+            <div>
+              <p className="text-lg mb-2"><strong>Age:</strong> {userDetails.age}</p>
+              <p className="text-lg mb-2"><strong>Weight:</strong> {userDetails.weight} kg</p>
+              <p className="text-lg mb-2"><strong>Height:</strong> {userDetails.height} cm</p>
+              <p className="text-lg mb-2"><strong>Activity Levels:</strong> {userDetails.activity_level}</p>
+              <p className="text-lg mb-2"><strong>Dietary Preferences:</strong> {userDetails.dietary_preferences}</p>
+            </div>
+            <div className='relative right-0 max-w-md'>
+              <p className="text-lg mb-2">Date of Joining: {formatDate(userDetails.createdAt)}</p> 
+            </div>
             <div className="btn-group flex justify-around mt-4">
               <button onClick={handleEdit} className="btn-primary">Edit</button>
               <button onClick={handleDelete} className="btn-secondary">Delete Account</button>
