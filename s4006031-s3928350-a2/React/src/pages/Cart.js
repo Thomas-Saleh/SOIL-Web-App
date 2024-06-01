@@ -109,10 +109,10 @@ function Cart() {
           ))}
         </ul>
       </div>
-      <div className="container mx-auto p-4 bg-white rounded-lg shadow-md w-1/4 mb-4">
+      <div className="container mx-auto p-4 bg-white rounded-lg shadow-md w-1/3 mb-4">
         <h2 className="text-xl font-semibold text-center">Total: ${totalPrice.toFixed(2)}</h2>
         <div className="flex justify-center mt-4">
-          <button onClick={handleCheckout} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Checkout</button>
+          <button onClick={handleCheckout} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Continue to payment</button>
         </div>
         {showCheckout && <Checkout cart={cart} />}
       </div>
