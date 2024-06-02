@@ -4,13 +4,6 @@ const cors = require('cors');
 const { buildSchema } = require('graphql');
 const mysql = require('mysql');
 
-// Configuration values directly in the code
-const DB_HOST = 'rmit.australiaeast.cloudapp.azure.com';
-const DB_USER = 's4006031_fsd_a2';
-const DB_PASS = 'p20040715!';
-const DB_NAME = 's4006031_fsd_a2';
-const PORT = 4000;
-
 const app = express(); // Initialize Express app
 
 // Use CORS middleware
@@ -36,7 +29,9 @@ const schema = buildSchema(`
     name: String!
     price: Float!
     special_price: Float
-    imageUrl: String
+    imageUrl: String!
+    createdAt: String
+    updatedAt: String
   }
 
   type Query {
@@ -47,7 +42,7 @@ const schema = buildSchema(`
   type Mutation {
     blockUser(id: ID!): User
     unblockUser(id: ID!): User
-    addProduct(name: String!, price: Float!, special_price: Float, imageUrl: String): Product
+    addProduct(name: String!, price: Float!, special_price: Float, imageUrl: String!): Product
     editProduct(id: ID!, name: String, price: Float, special_price: Float, imageUrl: String): Product
     deleteProduct(id: ID!): Product
   }
@@ -59,7 +54,7 @@ let db = mysql.createConnection({
     user: 's4006031_fsd_a2',
     password: 'p20040715!',
     database: 's4006031_fsd_a2',
-  });
+});
 
 function handleDisconnect() {
   db.connect((err) => {
@@ -119,32 +114,50 @@ const root = {
   },
   addProduct: ({ name, price, special_price, imageUrl }) => {
     return new Promise((resolve, reject) => {
+      const createdAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
+      const updatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
+      console.log('Adding product:', { name, price, special_price, imageUrl, createdAt, updatedAt });
       db.query(
-        'INSERT INTO products (name, price, special_price, imageUrl) VALUES (?, ?, ?, ?)',
-        [name, price, special_price, imageUrl],
+        'INSERT INTO products (name, price, special_price, imageUrl, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?)',
+        [name, price, special_price, imageUrl, createdAt, updatedAt],
         (err, results) => {
-          if (err) reject(err);
-          resolve({ id: results.insertId, name, price, special_price, imageUrl });
+          if (err) {
+            console.error('Error adding product:', err);
+            reject(err);
+          }
+          console.log('Product added successfully:', results);
+          resolve({ id: results.insertId, name, price, special_price, imageUrl, createdAt, updatedAt });
         }
       );
     });
   },
   editProduct: ({ id, name, price, special_price, imageUrl }) => {
     return new Promise((resolve, reject) => {
+      const updatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
+      console.log('Editing product:', { id, name, price, special_price, imageUrl, updatedAt });
       db.query(
-        'UPDATE products SET name = ?, price = ?, special_price = ?, imageUrl = ? WHERE id = ?',
-        [name, price, special_price, imageUrl, id],
+        'UPDATE products SET name = ?, price = ?, special_price = ?, imageUrl = ?, updatedAt = ? WHERE id = ?',
+        [name, price, special_price, imageUrl, updatedAt, id],
         (err, results) => {
-          if (err) reject(err);
-          resolve({ id, name, price, special_price, imageUrl });
+          if (err) {
+            console.error('Error editing product:', err);
+            reject(err);
+          }
+          console.log('Product edited successfully:', results);
+          resolve({ id, name, price, special_price, imageUrl, updatedAt });
         }
       );
     });
   },
   deleteProduct: ({ id }) => {
     return new Promise((resolve, reject) => {
+      console.log('Deleting product:', { id });
       db.query('DELETE FROM products WHERE id = ?', [id], (err, results) => {
-        if (err) reject(err);
+        if (err) {
+          console.error('Error deleting product:', err);
+          reject(err);
+        }
+        console.log('Product deleted successfully:', results);
         resolve({ id });
       });
     });
@@ -161,10 +174,6 @@ app.use(
   })
 );
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(4000, () => {
+    console.log('Server running on port 4000');
 });
-
-
-  
