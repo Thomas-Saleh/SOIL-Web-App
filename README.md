@@ -22,6 +22,9 @@ To get started, follow these steps:
 8. Start the React app:
    npm start
 
+
+** Note if npm install in Express failed, try npm install --legacy-peer-deps
+
 ### Available Scripts
 
 In the project directory, you can run:
@@ -61,7 +64,6 @@ These sections have moved to the respective documentation links provided.
 This section has moved to the troubleshooting section of the Create React App documentation.
 
 ## References
-
 
 References
 
