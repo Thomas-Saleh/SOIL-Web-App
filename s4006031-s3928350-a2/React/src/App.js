@@ -1,6 +1,5 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Home from './pages/Home';
-// unable to source the error however everything still works perfectly fine
 import Navbar from './pages/Navbar';
 import Footer from './pages/Footer';
 import SpecialDeals from './pages/SpecialDeals';
