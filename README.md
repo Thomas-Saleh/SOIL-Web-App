@@ -59,3 +59,31 @@ These sections have moved to the respective documentation links provided.
 ### `npm run build` fails to minify
 
 This section has moved to the troubleshooting section of the Create React App documentation.
+
+## References
+
+**icon Used:**
+**trolley-cart.png**
+https://www.flaticon.com/free-icon/trolley-cart_9485970?term=cart&page=1&position=65&origin=search&related_id=9485970
+**user.png**
+https://www.flaticon.com/free-icon/user_8801434?term=profile&page=2&position=68&origin=search&related_id=8801434
+**Soil icon.png**
+https://www.flaticon.com/free-icon/shop-sign_9293786?term=vegetable+shop&related_id=9293578&origin=search
+**instagram.png**
+https://www.flaticon.com/free-icon-font/instagram_6422200
+**facebook.png**
+https://www.flaticon.com/free-icon-font/facebook_6422199
+**twitter.png**
+https://www.flaticon.com/free-icon-font/twitter_6422210
+**Our Values.jpeg**
+https://stock.adobe.com/au/images/our-values-text-stamp-concept-background/593596978?asset_id=605159270
+**Happy Eating.jpeg**
+https://stock.adobe.com/au/images/portrait-of-cute-african-american-girl-eating-food-at-table-and-smiling-happily-while-enjoying-dinner-with-family/422313989?asset_id=422313989
+**Premium Vegetable.jpeg**
+https://stock.adobe.com/au/images/deluxe-veggie-hotpot-where-premium/778592267?asset_id=778592267
+
+**Styling Resources:**
+**Card Component**
+https://flowbite.com/docs/components/card/
+**Tailwind CSS**
+https://tailwindcss.com
