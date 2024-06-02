@@ -3,12 +3,16 @@ const db = require("../database/index.js");
 exports.getAllReviewsForProduct = async (req, res) => {
   try {
     const reviews = await db.review.findAll({
-      where: { product_id: req.params.productId }
+      where: { product_id: req.params.productId },
+      include: [{
+        model: db.user,
+        attributes: ['username'] // Include the username from the user table
+      }]
     });
     res.json(reviews);
   } catch (error) {
-    console.error('Error fetching reviews:', error);
-    res.status(500).json({ error: 'Failed to fetch reviews' });
+    console.error("Error fetching reviews:", error);
+    res.status(500).json({ error: "Failed to fetch reviews" });
   }
 };
 

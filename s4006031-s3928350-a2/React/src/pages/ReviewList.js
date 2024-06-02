@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { getAllReviewsForProduct, deleteReview } from '../data/repository';
 import ReviewForm from './ReviewForm';
 import { decodeJWT } from '../utils/jwtUtils';
+import StarRating from '../utils/StarRating';
 
 function ReviewList({ productId }) {
   const [reviews, setReviews] = useState([]);
@@ -55,7 +56,8 @@ function ReviewList({ productId }) {
       ) : (
         reviews.map((review) => (
           <div key={review.id} className="border border-gray-300 rounded p-2 mt-2">
-            <p><strong>{review.star_rating} stars</strong></p>
+            <StarRating rating={review.star_rating} />
+            <p><strong>{review.user.username}</strong></p>
             <p>{review.review_text}</p>
             {review.user_id === userId && (
               <>

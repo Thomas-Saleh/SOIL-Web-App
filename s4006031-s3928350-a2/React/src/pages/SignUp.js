@@ -9,7 +9,6 @@ function Signup() {
     password: '',
     confirmPassword: '',
   });
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
@@ -24,11 +23,8 @@ function Signup() {
       try {
         const response = await createUser(userDetails);
         if (response) {
-          setIsSubmitted(true);
-          alert('Registration successful! You will be redirected to the sign-in page shortly.'); // Popup success message
-          setTimeout(() => {
-            navigate('/sign-in');
-          }, 2000);
+          alert('Registration successful! Redirecting to the sign-in page.'); // Popup success message
+          navigate('/sign-in'); // Redirect to the sign-in page immediately
         }
       } catch (error) {
         if (error.response?.status === 409) {
@@ -132,7 +128,6 @@ function Signup() {
             Already have an account? <Link to="/sign-in" className="text-[#EE7214] hover:underline dark:text-[#EE7214]">Sign In</Link>
           </div>
           {errorMessage && <div className="text-red-500 text-sm">{errorMessage}</div>}
-          {isSubmitted && <div className="text-green-500 text-sm">Registration successful! You will be redirected to the sign-in page shortly.</div>}
         </form>
       </div>
     </div>

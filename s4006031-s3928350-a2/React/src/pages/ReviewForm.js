@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { addReview, updateReview } from '../data/repository';
 import { decodeJWT } from '../utils/jwtUtils';
+import StarRating from '../utils/StarRating';
 
 function ReviewForm({ productId, onReviewAdded, existingReview }) {
   const [reviewText, setReviewText] = useState('');
@@ -65,6 +66,7 @@ function ReviewForm({ productId, onReviewAdded, existingReview }) {
       />
       <div className="mt-2">
         <label className="block text-gray-800">Star Rating:</label>
+        <StarRating rating={starRating} />
         <select
           value={starRating}
           onChange={handleStarRatingChange}
