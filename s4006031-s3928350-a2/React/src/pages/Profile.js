@@ -195,12 +195,12 @@ function Profile() {
               <p className="text-sm mb-2 text-gray-900 dark:text-white"><strong>Dietary Preferences:</strong> {userDetails.dietary_preferences}</p>
             </div>
             <div className='flex justify-end '>
-              <p className="text-sm mb-2 text-gray-900 dark:text-white">Date of Joining: {formatDate(userDetails.createdAt)}</p> 
+              <p className="text-sm mb-2 text-gray-900 dark:text-white mt-8">Date of Joining: {formatDate(userDetails.createdAt)}</p> 
             </div>
             <div className="btn-group flex justify-around mt-4">
-              <button onClick={handleEdit} className="w-full text-white bg-[#527853] hover:bg-[#EE7214] focus:ring-4 focus:outline-none focus:ring-[#EE7214] font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-[#527853] dark:hover:bg-[#EE7214] dark:focus:ring-[#EE7214] mx-2">Edit</button>
-              <button onClick={handleDelete} className="w-full text-white bg-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700 mx-2">Delete Account</button>
-              <button onClick={handleLogout} className="w-full text-white bg-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700 mx-2">Logout</button>
+              <button onClick={handleEdit} className="w-full text-white bg-[#527853] hover:bg-[#EE7214] focus:ring-4 focus:outline-none focus:ring-[#EE7214] font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-[#527853] dark:hover:bg-[#EE7214] dark:focus:ring-[#EE7214] mx-2">Edit</button>
+              <button onClick={handleDelete} className="w-full text-white bg-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-700 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700 mx-2">Delete Account</button>
+              <button onClick={handleLogout} className="w-full text-white bg-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-700 font-medium rounded-lg text-sm px-5 py-2 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700 mx-2">Logout</button>
             </div>
           </div>
         )}
