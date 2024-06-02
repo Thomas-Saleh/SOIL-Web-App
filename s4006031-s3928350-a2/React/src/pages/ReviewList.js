@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { getAllReviewsForProduct, deleteReview } from '../data/repository';
+import { getAllReviewsForProduct, deleteReview, followUser, unfollowUser } from '../data/repository';
 import ReviewForm from './ReviewForm';
 import { decodeJWT } from '../utils/jwtUtils';
 import StarRating from '../utils/StarRating';
@@ -48,6 +48,24 @@ function ReviewList({ productId }) {
     setEditingReview(null); // Reset the editingReview state after review is added/edited
   };
 
+  const handleFollow = async (followingId) => {
+    try {
+      await followUser(userId, followingId);
+      alert("User followed successfully!");
+    } catch (error) {
+      console.error('Failed to follow user:', error);
+    }
+  };
+
+  const handleUnfollow = async (followingId) => {
+    try {
+      await unfollowUser(userId, followingId);
+      alert("User unfollowed successfully!");
+    } catch (error) {
+      console.error('Failed to unfollow user:', error);
+    }
+  };
+
   return (
     <div className="mt-4">
       <h3 className="text-xl font-semibold text-gray-800">Reviews</h3>
@@ -59,6 +77,22 @@ function ReviewList({ productId }) {
             <StarRating rating={review.star_rating} />
             <p><strong>{review.user.username}</strong></p>
             <p>{review.review_text}</p>
+            {review.user_id !== userId && (
+              <>
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 mt-4"
+                  onClick={() => handleFollow(review.user_id)}
+                >
+                  Follow
+                </button>
+                <button
+                  className="bg-red-500 hover:bg-red-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 mt-4"
+                  onClick={() => handleUnfollow(review.user_id)}
+                >
+                  Unfollow
+                </button>
+              </>
+            )}
             {review.user_id === userId && (
               <>
                 <button

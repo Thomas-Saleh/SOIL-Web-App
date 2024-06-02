@@ -2,7 +2,7 @@ const db = require("../database/index.js");
 
 // Follow a user.
 exports.followUser = async (req, res) => {
-  const follow = await db.Follow.create({
+  const follow = await db.follow.create({
     follower_id: req.body.follower_id,
     following_id: req.body.following_id
   });
@@ -11,7 +11,7 @@ exports.followUser = async (req, res) => {
 
 // Unfollow a user.
 exports.unfollowUser = async (req, res) => {
-  const follow = await db.Follow.findOne({
+  const follow = await db.follow.findOne({
     where: {
       follower_id: req.body.follower_id,
       following_id: req.body.following_id

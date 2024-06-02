@@ -98,6 +98,16 @@ async function deleteReview(reviewId) {
   const response = await axios.delete(`${API_HOST}/api/reviews/${reviewId}`);
   return response.data;
 }
+// --- Follow --------------------------------------------
+async function followUser(followerId, followingId) {
+  const response = await axios.post(API_HOST + "/api/follow", { follower_id: followerId, following_id: followingId });
+  return response.data;
+}
+
+async function unfollowUser(followerId, followingId) {
+  const response = await axios.delete(API_HOST + "/api/follow", { data: { follower_id: followerId, following_id: followingId } });
+  return response.data;
+}
 
 // --- Helper functions to interact with local storage --------------------------------------------
 function setUser(user) {
@@ -124,5 +134,6 @@ export {
   setUser, getUser, removeUser, deleteUser, 
   getSpecialDeals, setSpecialDeals,
   getCartItems, addCartItem, updateCartItem, removeCartItem, checkout, clearCart,
-  getAllReviewsForProduct, addReview, updateReview, deleteReview
+  getAllReviewsForProduct, addReview, updateReview, deleteReview,
+  followUser, unfollowUser
 };

@@ -31,23 +31,25 @@ const specialDeals = [
 
 exports.populateDatabase = async () => {
   try {
-    await db.sequelize.query('SET FOREIGN_KEY_CHECKS = 0', { raw: true });
+    // Check if the products table is empty
+    const productCount = await db.product.count();
+    if (productCount === 0) {
+      await db.product.bulkCreate(vegetables);
+      console.log("Products populated!");
+    } else {
+      console.log("Products already populated!");
+    }
 
-    // Drop tables in the correct order
-    await db.sequelize.getQueryInterface().dropTable('follows');
-    await db.sequelize.getQueryInterface().dropTable('carts');
-    await db.sequelize.getQueryInterface().dropTable('reviews');
-    await db.sequelize.getQueryInterface().dropTable('products');
-
-    await db.sequelize.sync({ force: true });
-
-    await db.product.bulkCreate(vegetables);
-    await db.specialDeal.bulkCreate(specialDeals);
-    console.log("Database populated!");
+    // Check if the special deals table is empty
+    const specialDealCount = await db.specialDeal.count();
+    if (specialDealCount === 0) {
+      await db.specialDeal.bulkCreate(specialDeals);
+      console.log("Special deals populated!");
+    } else {
+      console.log("Special deals already populated!");
+    }
   } catch (error) {
     console.error("Error populating database:", error);
-  } finally {
-    await db.sequelize.query('SET FOREIGN_KEY_CHECKS = 1', { raw: true });
   }
 };
 
