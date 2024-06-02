@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
-import { verifyUser, getUser, setUser } from '../data/repository';
-import { decodeJWT } from '../utils/jwtUtils';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import { verifyUser, getUser, setUser } from '../data/repository'; // Import functions for user verification and management
+import { decodeJWT } from '../utils/jwtUtils'; // Import utility to decode JWT tokens
 
 function SignIn() {
+  // State variables to manage login details, login status, and error messages
   const [loginDetails, setLoginDetails] = useState({
     email: '',
     password: '',
   });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginError, setLoginError] = useState('');
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate(); // Initialize navigate for redirecting users
 
+  // useEffect to check for existing session token on component mount
   useEffect(() => {
     const sessionToken = localStorage.getItem('sessionToken');
     if (sessionToken) {
@@ -22,19 +24,21 @@ function SignIn() {
     }
   }, []);
 
+  // Handle input changes and update login details state
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setLoginDetails({ ...loginDetails, [name]: value });
   };
 
+  // Handle form submission for login
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const response = await verifyUser(loginDetails.email, loginDetails.password);
       if (response && response.token) {
-        localStorage.setItem('sessionToken', response.token);
-        const decodedToken = decodeJWT(response.token);
-        setUser(decodedToken);
+        localStorage.setItem('sessionToken', response.token); // Store session token
+        const decodedToken = decodeJWT(response.token); // Decode JWT token
+        setUser(decodedToken); // Set user data
         setIsLoggedIn(true);
         setLoginError('');
         alert('Login successful! You are now logged in.'); // Popup success message
@@ -47,11 +51,13 @@ function SignIn() {
     }
   };
 
+  // Handle user logout
   const handleLogout = () => {
-    localStorage.removeItem('sessionToken');
+    localStorage.removeItem('sessionToken'); // Remove session token
     setIsLoggedIn(false);
   };
 
+  // Render welcome message if user is logged in
   if (isLoggedIn) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -64,6 +70,7 @@ function SignIn() {
     );
   }
 
+  // Render sign-in form if user is not logged in
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#F9E8D9]">
       <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">

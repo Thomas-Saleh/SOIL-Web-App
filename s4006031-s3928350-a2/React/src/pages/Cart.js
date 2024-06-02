@@ -4,8 +4,11 @@ import { decodeJWT } from '../utils/jwtUtils';
 import Checkout from './Checkout';
 
 function Cart() {
+  // State to manage the cart items
   const [cart, setCart] = useState([]);
+  // State to toggle the checkout view
   const [showCheckout, setShowCheckout] = useState(false);
+  // State to check if the user is logged in
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -18,6 +21,7 @@ function Cart() {
       if (decodedToken && decodedToken.user_id) {
         const userId = decodedToken.user_id;
         console.log('User ID:', userId);
+        // Fetch cart items if user is authenticated
         getCartItems(userId)
           .then(cartItems => {
             console.log('Cart items fetched:', cartItems);
@@ -32,15 +36,16 @@ function Cart() {
     } else {
       console.log('No session token found');
     }
-  }, []);
-
+  }, []); // Empty dependency array ensures this runs only once on mount
 
   const updateQuantity = (itemId, newQuantity) => {
     const updatedCart = cart.map(item => {
       if (item.id === itemId) {
         const updatedItem = { ...item, quantity: newQuantity };
+        // Update the quantity in the repository
         updateCartItem(itemId, newQuantity)
           .then(() => {
+            // Update the cart state with the new quantity
             setCart(prevCart =>
               prevCart.map(item => (item.id === itemId ? updatedItem : item))
             );
@@ -55,6 +60,7 @@ function Cart() {
 
   const removeFromCart = (itemId) => {
     const updatedCart = cart.filter(item => item.id !== itemId);
+    // Remove the item from the repository
     removeCartItem(itemId);
     setCart(updatedCart);
   };
@@ -63,8 +69,10 @@ function Cart() {
     setShowCheckout(true);
   };
 
+  // Calculate total price of all items in the cart
   const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
+  // Render message if user is not logged in
   if (!isLoggedIn) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -80,6 +88,7 @@ function Cart() {
     );
   }
 
+  // Render message if cart is empty
   if (cart.length === 0) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -135,6 +144,7 @@ function Cart() {
         <div className="flex justify-center mt-4">
           <button onClick={handleCheckout} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Continue to payment</button>
         </div>
+        {/* Render the Checkout component if showCheckout is true */}
         {showCheckout && <Checkout cart={cart} />}
       </div>
     </div>
