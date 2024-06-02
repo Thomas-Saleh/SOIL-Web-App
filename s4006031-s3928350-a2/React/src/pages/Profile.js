@@ -195,8 +195,8 @@ function Profile() {
               <p className="text-lg mb-2"><strong>Activity Levels:</strong> {userDetails.activity_level}</p>
               <p className="text-lg mb-2"><strong>Dietary Preferences:</strong> {userDetails.dietary_preferences}</p>
             </div>
-            <div className='relative right-0 max-w-md'>
-              <p className="text-lg mb-2">Date of Joining: {formatDate(userDetails.createdAt)}</p> 
+            <div className='flex justify-end '>
+              <p className="text-0.125rem mb-2">Date of Joining: {formatDate(userDetails.createdAt)}</p> 
             </div>
             <div className="btn-group flex justify-around mt-4">
               <button onClick={handleEdit} className="btn-primary">Edit</button>
