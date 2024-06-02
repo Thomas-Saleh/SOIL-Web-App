@@ -65,9 +65,10 @@ function ReviewForm({ productId, onReviewAdded, existingReview }) {
         required
       />
       <div className="mt-2">
-        <label className="block text-gray-800">Star Rating:</label>
+        <label htmlFor="starRating" className="block text-gray-800">Star Rating:</label>
         <StarRating rating={starRating} />
         <select
+          id="starRating"
           value={starRating}
           onChange={handleStarRatingChange}
           className="border border-gray-300 rounded p-1"

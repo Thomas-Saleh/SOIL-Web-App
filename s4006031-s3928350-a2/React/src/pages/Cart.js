@@ -11,18 +11,41 @@ function Cart() {
   useEffect(() => {
     const sessionToken = localStorage.getItem('sessionToken');
     if (sessionToken) {
+      console.log('Session token found:', sessionToken);
       setIsLoggedIn(true);
       const decodedToken = decodeJWT(sessionToken);
-      const userId = decodedToken.user_id;
-      getCartItems(userId).then(setCart).catch(console.error);
+      console.log('Decoded token:', decodedToken);
+      if (decodedToken && decodedToken.user_id) {
+        const userId = decodedToken.user_id;
+        console.log('User ID:', userId);
+        getCartItems(userId)
+          .then(cartItems => {
+            console.log('Cart items fetched:', cartItems);
+            setCart(cartItems);
+          })
+          .catch(error => {
+            console.error('Error fetching cart items:', error);
+          });
+      } else {
+        console.error('Failed to decode token or user_id not found.');
+      }
+    } else {
+      console.log('No session token found');
     }
   }, []);
+
 
   const updateQuantity = (itemId, newQuantity) => {
     const updatedCart = cart.map(item => {
       if (item.id === itemId) {
         const updatedItem = { ...item, quantity: newQuantity };
-        updateCartItem(itemId, newQuantity);
+        updateCartItem(itemId, newQuantity)
+          .then(() => {
+            setCart(prevCart =>
+              prevCart.map(item => (item.id === itemId ? updatedItem : item))
+            );
+          })
+          .catch(error => console.error('Error updating item quantity:', error));
         return updatedItem;
       }
       return item;

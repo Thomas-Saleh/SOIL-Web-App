@@ -76,12 +76,15 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 When starting up our website you will arrive at the home page. 
 From there you can navigate through the website via the navbar at the top. 
-To create an account you can use the sign up button to create an account. 
-Once you've created an account you can sign in by clicking the sign in button at the top of the page. 
+The navbar uses a hover function so hover over the profile icon where you will be met with the option to signin signup go to your profile or logout. First press signup. 
+Then you will need to input your details.
+Once you've created an account it will automatically take you to the signin page. 
 Then you will have to sign in. 
-Once you sign in you can view your profile and make edits to your profile as well as a diet plan. 
-You can also begin to add items to your cart by navigating to the Shop or Sale button at the top left of the page and from there you can choose your quantity or what products you would like and add them to cart. 
-To view your cart press the Profile button at the top right and press view cart. 
+Once you sign in you can view your profile and make edits to your profile. 
+You can also begin to add items to your cart by navigating to the products button on the navbar. 
+Then you can go to either specials or products.
+From there you can choose your quantity or what products you would like and add them to cart. 
+To view your cart press the cart icon button at the top right. 
 From there you can checkout, enter your credit card details and a summary page will pop up once your credit card is validated. 
 
 That's about it to our website. 
