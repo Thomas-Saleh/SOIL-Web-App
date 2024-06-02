@@ -115,99 +115,99 @@ function Profile() {
   }
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="w-auto p-8 rounded-lg shadow-lg  mx-25">
+    <div className="flex justify-center items-center h-screen bg-[#F9E8D9]">
+      <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
         {showSuccessMessage && (
-          <div className="success-message">
-            Your changes have been saved successfully!
-          </div>
+          <div className="success-message text-green-500">Your changes have been saved successfully!</div>
         )}
         {isEditing ? (
           <div>
-            <div className="flex flex-col space-y-2">
-              <label className="block text-sm font-bold mb-2 text-gray-1000">Name:</label>
-              <input type="text" name="username" value={editedUser.username} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" />
-
-              <label className="block text-sm font-bold mb-2 text-gray-1000">Email:</label>
-              <input type="email" name="email" value={editedUser.email} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" />
-
-              <label className="block text-sm font-bold mb-2 text-gray-1000">New Password:</label>
-              <input type="password" name="password" value={editedUser.password || ''} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" />
-
-              {editedUser.password && (
-                <>
-                  <label className="block text-sm font-bold mb-2 text-gray-1000">Confirm Password:</label>
-                  <input type="password" name="confirmPassword" value={confirmPassword} onChange={handleConfirmPasswordChange} className="input-field border border-gray-300 rounded px-3 py-2" />
-                </>
-              )}
-
-              <label className="block text-sm font-bold mb-2 text-gray-1000">Age:</label>
-              <input type="number" name="age" value={editedUser.age} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" />
-
-              <label className="block text-sm font-bold mb-2 text-gray-1000">Weight:</label>
-              <input type="number" name="weight" value={editedUser.weight} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" />
-
-              <label className="block text-sm font-bold mb-2 text-gray-1000">Height:</label>
-              <input type="number" name="height" value={editedUser.height} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" />
-
-              <label className="block text-sm font-bold mb-2 text-gray-1000">Activity Level:</label>
-              <select name="activity_level" value={editedUser.activity_level || ''} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" >
-                <option value="" disabled>Select your activity level</option>
-                {activityLevels.map(level => (
-                  <option key={level} value={level}>{level}</option>
-                ))}
-              </select>
-
-              <label className="block text-sm font-bold mb-2 text-gray-1000">Dietary Preferences:</label>
-              <select name="dietary_preferences" value={editedUser.dietary_preferences || ''} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" >
-                <option value="" disabled>Select your dietary preference</option>
-                {dietaryPreferences.map(preference => (
-                  <option key={preference} value={preference}>{preference}</option>
-                ))}
-              </select>
-
-              <label className="block text-sm font-bold mb-2 text-gray-1000">Health Goals:</label>
-              <select name="health_goals" value={editedUser.health_goals || ''} onChange={handleChange} className="input-field border border-gray-300 rounded px-3 py-2" >
-                <option value="" disabled>Select your health goal</option>
-                {healthGoals.map(goal => (
-                  <option key={goal} value={goal}>{goal}</option>
-                ))}
-              </select>
-              
-            </div>
-            <div className="flex justify-around mt-4">
-              <button onClick={handleSave} className="btn-primary">Save</button>
-              <button onClick={() => setIsEditing(false)} className="btn-secondary">Cancel</button>
-            </div>
+            <form className="space-y-6" onSubmit={handleSave}>
+              <div className="flex flex-col space-y-2">
+                <label className="block text-sm font-medium text-gray-900 dark:text-white">Name:</label>
+                <input type="text" name="username" value={editedUser.username} onChange={handleChange} className="bg-[#F9E8D9] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#527853] focus:border-[#527853] block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" />
+  
+                <label className="block text-sm font-medium text-gray-900 dark:text-white">Email:</label>
+                <input type="email" name="email" value={editedUser.email} onChange={handleChange} className="bg-[#F9E8D9] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#527853] focus:border-[#527853] block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" />
+  
+                <label className="block text-sm font-medium text-gray-900 dark:text-white">New Password:</label>
+                <input type="password" name="password" value={editedUser.password || ''} onChange={handleChange} className="bg-[#F9E8D9] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#527853] focus:border-[#527853] block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" />
+  
+                {editedUser.password && (
+                  <>
+                    <label className="block text-sm font-medium text-gray-900 dark:text-white">Confirm Password:</label>
+                    <input type="password" name="confirmPassword" value={confirmPassword} onChange={handleConfirmPasswordChange} className="bg-[#F9E8D9] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#527853] focus:border-[#527853] block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" />
+                  </>
+                )}
+  
+                <label className="block text-sm font-medium text-gray-900 dark:text-white">Age:</label>
+                <input type="number" name="age" value={editedUser.age} onChange={handleChange} className="bg-[#F9E8D9] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#527853] focus:border-[#527853] block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" />
+  
+                <label className="block text-sm font-medium text-gray-900 dark:text-white">Weight:</label>
+                <input type="number" name="weight" value={editedUser.weight} onChange={handleChange} className="bg-[#F9E8D9] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#527853] focus:border-[#527853] block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" />
+  
+                <label className="block text-sm font-medium text-gray-900 dark:text-white">Height:</label>
+                <input type="number" name="height" value={editedUser.height} onChange={handleChange} className="bg-[#F9E8D9] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#527853] focus:border-[#527853] block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" />
+  
+                <label className="block text-sm font-medium text-gray-900 dark:text-white">Activity Level:</label>
+                <select name="activity_level" value={editedUser.activity_level || ''} onChange={handleChange} className="bg-[#F9E8D9] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#527853] focus:border-[#527853] block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" >
+                  <option value="" disabled>Select your activity level</option>
+                  {activityLevels.map(level => (
+                    <option key={level} value={level}>{level}</option>
+                  ))}
+                </select>
+  
+                <label className="block text-sm font-medium text-gray-900 dark:text-white">Dietary Preferences:</label>
+                <select name="dietary_preferences" value={editedUser.dietary_preferences || ''} onChange={handleChange} className="bg-[#F9E8D9] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#527853] focus:border-[#527853] block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" >
+                  <option value="" disabled>Select your dietary preference</option>
+                  {dietaryPreferences.map(preference => (
+                    <option key={preference} value={preference}>{preference}</option>
+                  ))}
+                </select>
+  
+                <label className="block text-sm font-medium text-gray-900 dark:text-white">Health Goals:</label>
+                <select name="health_goals" value={editedUser.health_goals || ''} onChange={handleChange} className="bg-[#F9E8D9] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#527853] focus:border-[#527853] block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" >
+                  <option value="" disabled>Select your health goal</option>
+                  {healthGoals.map(goal => (
+                    <option key={goal} value={goal}>{goal}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex justify-around mt-4">
+                <button type="submit" className="w-full text-white bg-[#527853] hover:bg-[#EE7214] focus:ring-4 focus:outline-none focus:ring-[#EE7214] font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-[#527853] dark:hover:bg-[#EE7214] dark:focus:ring-[#EE7214]">Save</button>
+                <button onClick={() => setIsEditing(false)} className="w-full text-white bg-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700">Cancel</button>
+              </div>
+            </form>
           </div>
         ) : (
-          <div className='bg-f7a072'>
+          <div className="bg-gray-800 dark p-4 rounded-lg shadow-md">
             <div>
-              <p className="text-xl mb-4 left 5"><strong>{userDetails.username}</strong></p>
-              <p className="text-lg mb-2"><strong>Email:</strong> {userDetails.email}</p>
-              <p className="text-lg mb-2"><strong>Health Goals:</strong> {userDetails.health_goals}</p>
+              <p className="text-xl mb-4 text-gray-900 dark:text-white"><strong>Welcome {userDetails.username}!</strong></p>
+              <p className="text-sm mb-2 text-gray-900 dark:text-white"><strong>Email:</strong> {userDetails.email}</p>
+              <p className="text-sm mb-2 text-gray-900 dark:text-white"><strong>Health Goals:</strong> {userDetails.health_goals}</p>
             </div>
-            <p>===========================================================================================</p>
+            <p className="border-t border-gray-200 my-4"></p>
             <div>
-              <p className="text-lg mb-2"><strong>Age:</strong> {userDetails.age}</p>
-              <p className="text-lg mb-2"><strong>Weight:</strong> {userDetails.weight} kg</p>
-              <p className="text-lg mb-2"><strong>Height:</strong> {userDetails.height} cm</p>
-              <p className="text-lg mb-2"><strong>Activity Levels:</strong> {userDetails.activity_level}</p>
-              <p className="text-lg mb-2"><strong>Dietary Preferences:</strong> {userDetails.dietary_preferences}</p>
+              <p className="text-sm mb-2 text-gray-900 dark:text-white"><strong>Age:</strong> {userDetails.age}</p>
+              <p className="text-sm mb-2 text-gray-900 dark:text-white"><strong>Weight:</strong> {userDetails.weight} kg</p>
+              <p className="text-sm mb-2 text-gray-900 dark:text-white"><strong>Height:</strong> {userDetails.height} cm</p>
+              <p className="text-sm mb-2 text-gray-900 dark:text-white"><strong>Activity Levels:</strong> {userDetails.activity_level}</p>
+              <p className="text-sm mb-2 text-gray-900 dark:text-white"><strong>Dietary Preferences:</strong> {userDetails.dietary_preferences}</p>
             </div>
             <div className='flex justify-end '>
-              <p className="text-0.125rem mb-2">Date of Joining: {formatDate(userDetails.createdAt)}</p> 
+              <p className="text-sm mb-2 text-gray-900 dark:text-white">Date of Joining: {formatDate(userDetails.createdAt)}</p> 
             </div>
             <div className="btn-group flex justify-around mt-4">
-              <button onClick={handleEdit} className="btn-primary">Edit</button>
-              <button onClick={handleDelete} className="btn-secondary">Delete Account</button>
-              <button onClick={handleLogout} className="btn-secondary">Logout</button>
+              <button onClick={handleEdit} className="w-full text-white bg-[#527853] hover:bg-[#EE7214] focus:ring-4 focus:outline-none focus:ring-[#EE7214] font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-[#527853] dark:hover:bg-[#EE7214] dark:focus:ring-[#EE7214] mx-2">Edit</button>
+              <button onClick={handleDelete} className="w-full text-white bg-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700 mx-2">Delete Account</button>
+              <button onClick={handleLogout} className="w-full text-white bg-gray-500 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700 mx-2">Logout</button>
             </div>
           </div>
         )}
       </div>
     </div>
   );
+  
 }
 
 export default Profile;
