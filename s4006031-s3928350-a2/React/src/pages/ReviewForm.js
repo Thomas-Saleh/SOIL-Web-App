@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { addReview, updateReview } from '../data/repository';
-import { decodeJWT } from '../utils/jwtUtils';
-import StarRating from '../utils/StarRating';
+import { addReview, updateReview } from '../data/repository'; // Importing functions to add or update reviews
+import { decodeJWT } from '../utils/jwtUtils'; // Importing JWT decoding function
+import StarRating from '../utils/StarRating'; // Importing StarRating component
 
 function ReviewForm({ productId, onReviewAdded, existingReview }) {
+  // State variables to manage review text, star rating, and editing status
   const [reviewText, setReviewText] = useState('');
   const [starRating, setStarRating] = useState(1);
   const [isEditing, setIsEditing] = useState(false);
 
+  // Effect to populate form fields if editing an existing review
   useEffect(() => {
     if (existingReview) {
       setReviewText(existingReview.review_text);
@@ -16,21 +18,23 @@ function ReviewForm({ productId, onReviewAdded, existingReview }) {
     }
   }, [existingReview]);
 
+  // Event handlers to update review text and star rating
   const handleReviewTextChange = (e) => setReviewText(e.target.value);
   const handleStarRatingChange = (e) => setStarRating(parseInt(e.target.value));
 
+  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const sessionToken = localStorage.getItem('sessionToken');
+    const sessionToken = localStorage.getItem('sessionToken'); // Retrieve session token from local storage
     if (!sessionToken) {
-      alert('You must be logged in to submit a review.');
+      alert('You must be logged in to submit a review.'); // Alert user if not logged in
       return;
     }
 
-    const decodedToken = decodeJWT(sessionToken);
+    const decodedToken = decodeJWT(sessionToken); // Decode JWT to get user ID
     const userId = decodedToken.user_id;
 
-    const reviewData = {
+    const reviewData = { // Construct review data object
       user_id: userId,
       product_id: productId,
       review_text: reviewText,
@@ -39,17 +43,17 @@ function ReviewForm({ productId, onReviewAdded, existingReview }) {
 
     try {
       if (isEditing) {
-        await updateReview(existingReview.id, reviewData);
+        await updateReview(existingReview.id, reviewData); // Update review if editing existing review
       } else {
-        await addReview(reviewData);
+        await addReview(reviewData); // Add new review if not editing
       }
-      onReviewAdded();
-      setReviewText('');
-      setStarRating(1);
-      setIsEditing(false);
+      onReviewAdded(); // Callback function to notify parent component of review addition/update
+      setReviewText(''); // Reset review text
+      setStarRating(1); // Reset star rating
+      setIsEditing(false); // Reset editing status
     } catch (error) {
-      console.error('Failed to create review:', error);
-      alert('Failed to create review.');
+      console.error('Failed to create review:', error); // Log error if review creation fails
+      alert('Failed to create review.'); // Alert user if review creation fails
     }
   };
 
@@ -66,7 +70,7 @@ function ReviewForm({ productId, onReviewAdded, existingReview }) {
       />
       <div className="mt-2">
         <label htmlFor="starRating" className="block text-gray-800">Star Rating:</label>
-        <StarRating rating={starRating} />
+        <StarRating rating={starRating} /> {/* Display star rating component */}
         <select
           id="starRating"
           value={starRating}
@@ -82,7 +86,7 @@ function ReviewForm({ productId, onReviewAdded, existingReview }) {
         </select>
       </div>
       <button type="submit" className="bg-green-500 hover:bg-green-700 text-white font-medium rounded-lg text-sm px-5 py-2.5 mt-4">
-        {isEditing ? 'Update Review' : 'Submit Review'}
+        {isEditing ? 'Update Review' : 'Submit Review'} {/* Button text based on editing status */}
       </button>
     </form>
   );

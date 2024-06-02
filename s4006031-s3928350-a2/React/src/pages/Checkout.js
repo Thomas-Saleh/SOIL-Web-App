@@ -3,28 +3,35 @@ import { checkout, clearCart } from '../data/repository'; // Import the reposito
 import SummaryPage from './SummaryPage'; // Import the SummaryPage component
 import { decodeJWT } from '../utils/jwtUtils'; // Import the custom decode function
 
-
-
 function Checkout({ cart }) {
+  // State to manage credit card number input
   const [creditCardNumber, setCreditCardNumber] = useState('');
+  // State to manage expiry date input
   const [expiryDate, setExpiryDate] = useState('');
+  // State to manage error messages
   const [errorMessage, setErrorMessage] = useState('');
+  // State to manage purchase success status
   const [isPurchaseSuccessful, setIsPurchaseSuccessful] = useState(false);
+  // State to manage order summary after successful purchase
   const [orderSummary, setOrderSummary] = useState([]);
 
+  // Handler for credit card number input change
   const handleCreditCardChange = (e) => {
     setCreditCardNumber(e.target.value);
   };
 
+  // Handler for expiry date input change
   const handleExpiryDateChange = (e) => {
     setExpiryDate(e.target.value);
   };
 
+  // Function to validate the credit card number using Luhn algorithm
   const validateCreditCard = () => {
     const cleanedCreditCardNumber = creditCardNumber.replace(/[-\s]/g, '');
     return luhnCheck(cleanedCreditCardNumber);
   };
 
+  // Luhn algorithm implementation for credit card validation
   const luhnCheck = (value) => {
     let sum = 0;
     let shouldDouble = false;
@@ -42,6 +49,7 @@ function Checkout({ cart }) {
     return sum % 10 === 0;
   };
 
+  // Function to validate the expiry date
   const validateExpiryDate = () => {
     const currentDate = new Date();
     const parts = expiryDate.split('/');
@@ -51,6 +59,7 @@ function Checkout({ cart }) {
     return expiry > currentDate;
   };
 
+  // Handler for the checkout process
   const handleCheckout = async () => {
     setErrorMessage('');
     if (!validateCreditCard()) {
@@ -87,7 +96,7 @@ function Checkout({ cart }) {
   return (
     <div>
       {!isPurchaseSuccessful ? (
-        <div className="mt-4"> 
+        <div className="mt-4">
           <div className="text-center mt-4">
             <input
               type="text"
@@ -121,7 +130,6 @@ function Checkout({ cart }) {
       )}
     </div>
   );
-  
 }
 
 export default Checkout;

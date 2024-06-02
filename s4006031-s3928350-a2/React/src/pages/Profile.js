@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { findUser, updateUser, deleteUser } from '../data/repository';
-import { decodeJWT } from '../utils/jwtUtils';
+import { findUser, updateUser, deleteUser } from '../data/repository'; // Import functions for user data management
+import { decodeJWT } from '../utils/jwtUtils'; // Import utility to decode JWT tokens
 
+// Define constants for user attributes
 const activityLevels = ['light', 'moderate', 'active', 'very active'];
 const dietaryPreferences = ['vegan', 'vegetarian', 'pescatarian', 'dairy free', 'carnivore diet'];
 const healthGoals = ['weight loss', 'muscle gain', 'maintenance', 'sleep 7 to 9 hours', 'eat nutritiously'];
 
 function Profile() {
+  // State variables to manage user details, editing state, and UI feedback
   const [userDetails, setUserDetails] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  // useEffect to fetch user details on component mount
   useEffect(() => {
     const sessionToken = localStorage.getItem('sessionToken');
     if (sessionToken) {
@@ -23,6 +26,7 @@ function Profile() {
     }
   }, []);
 
+  // Function to fetch user details from repository
   const fetchUserDetails = async (userId) => {
     try {
       const user = await findUser(userId);
@@ -36,35 +40,42 @@ function Profile() {
     }
   };
 
+  // Function to format date strings for display
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
+  // Function to clear the shopping cart from localStorage
   const clearShoppingCart = () => {
     localStorage.removeItem('cart');
   };
 
+  // Function to handle user logout
   const handleLogout = () => {
     clearShoppingCart();
     localStorage.removeItem('sessionToken');
     window.location.href = '/'; // Redirect to homepage
   };
 
+  // Function to enable editing mode
   const handleEdit = () => {
     setIsEditing(true);
     setEditedUser({ ...userDetails, password: '' });
   };
 
+  // Function to handle input changes during editing
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditedUser({ ...editedUser, [name]: value });
   };
 
+  // Function to handle confirm password input changes
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value);
   };
 
+  // Function to save the edited user details
   const handleSave = async () => {
     if (editedUser.password && editedUser.password !== confirmPassword) {
       alert("Passwords do not match");
@@ -85,6 +96,7 @@ function Profile() {
     }
   };
 
+  // Function to handle user account deletion
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete your account?')) {
       try {
@@ -97,6 +109,7 @@ function Profile() {
     }
   };
 
+  // Render a prompt to sign in if no session token is found
   if (!localStorage.getItem('sessionToken')) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -110,10 +123,12 @@ function Profile() {
     );
   }
 
+  // Render a loading message while user details are being fetched
   if (!userDetails) {
     return <div>Loading...</div>;
   }
 
+  // Main component render
   return (
     <div className="flex justify-center items-center h-screen bg-[#F9E8D9]">
       <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
@@ -207,7 +222,6 @@ function Profile() {
       </div>
     </div>
   );
-  
 }
 
 export default Profile;

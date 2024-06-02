@@ -6,6 +6,7 @@ import ReviewForm from './ReviewForm';
 import ReviewList from './ReviewList';
 
 function Products() {
+  // State variables for products, quantities, reviews, and UI state
   const [products, setProducts] = useState([]);
   const [quantities, setQuantities] = useState({});
   const [reviews, setReviews] = useState({});
@@ -13,6 +14,7 @@ function Products() {
   const [showReviewList, setShowReviewList] = useState({});
   const [reviewCounts, setReviewCounts] = useState({});
 
+  // Fetch products and their review counts
   const fetchProducts = async () => {
     try {
       const response = await axios.get('http://localhost:3000/api/products');
@@ -29,6 +31,7 @@ function Products() {
     }
   };
 
+  // Fetch reviews for a specific product
   const fetchReviews = useCallback(async (productId) => {
     try {
       const reviewsData = await getAllReviewsForProduct(productId);
@@ -41,10 +44,12 @@ function Products() {
     }
   }, []);
 
+  // Initial fetch of products on component mount
   useEffect(() => {
     fetchProducts();
   }, []);
 
+  // Handle change in product quantity
   const handleQuantityChange = (productId, quantity) => {
     setQuantities((prevState) => ({
       ...prevState,
@@ -52,6 +57,7 @@ function Products() {
     }));
   };
 
+  // Add a product to the cart
   const addToCart = async (product) => {
     const sessionToken = localStorage.getItem('sessionToken');
     if (!sessionToken) {
@@ -88,6 +94,7 @@ function Products() {
     }
   };
 
+  // Toggle the visibility of the review form for a product
   const toggleReviewForm = (productId) => {
     setShowReviewForm(prevState => ({
       ...prevState,
@@ -95,6 +102,7 @@ function Products() {
     }));
   };
 
+  // Toggle the visibility of the review list for a product
   const toggleReviewList = (productId) => {
     setShowReviewList(prevState => ({
       ...prevState,
@@ -102,6 +110,7 @@ function Products() {
     }));
   };
 
+  // Handle the addition of a new review
   const handleReviewAdded = async (productId) => {
     await fetchReviews(productId);
     setReviewCounts(prevState => ({
@@ -121,11 +130,14 @@ function Products() {
         <p className="text-center">Explore our selection of fresh organic vegetables.</p>
       </div>
 
+      {/* Product listing grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 justify-center mt-8 px-4">
         {products.map((product) => (
           <div key={product.id} className="bg-white border border-gray-300 rounded-lg shadow-md p-4 flex flex-col items-center mb-4">
+            {/* Product image */}
             <img src={product.imageUrl} alt={product.name} className="w-24 h-24 rounded-full p-2 bg-gray-100" />
             <div className="text-center mt-2">
+              {/* Product name and price */}
               <h2 className="text-lg font-semibold text-gray-800">{product.name}</h2>
               <p className="text-sm text-gray-600 mt-1">
                 {product.special_price ? (
@@ -137,6 +149,7 @@ function Products() {
                   `$${Number(product.price).toFixed(2)}`
                 )}
               </p>
+              {/* Quantity input */}
               <input
                 type="number"
                 min="1"
@@ -145,27 +158,32 @@ function Products() {
                 className="mt-1 w-12 text-center border border-gray-300 rounded"
               />
             </div>
+            {/* Add to cart button */}
             <button
               className="bg-green-500 hover:bg-green-700 text-white font-medium rounded-md text-sm px-4 py-2 mt-2"
               onClick={() => addToCart(product)}
             >
               Add to Cart
             </button>
+            {/* Toggle review form button */}
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-medium rounded-md text-sm px-4 py-2 mt-2"
               onClick={() => toggleReviewForm(product.id)}
             >
               Leave a Review
             </button>
+            {/* Render review form if toggled */}
             {showReviewForm[product.id] && (
               <ReviewForm productId={product.id} onReviewAdded={() => handleReviewAdded(product.id)} />
             )}
+            {/* Toggle review list button */}
             <button
               className="bg-yellow-500 hover:bg-yellow-700 text-white font-medium rounded-md text-sm px-4 py-2 mt-2"
               onClick={() => toggleReviewList(product.id)}
             >
               {`See Reviews (${reviewCounts[product.id] || 0})`}
             </button>
+            {/* Render review list if toggled */}
             {showReviewList[product.id] && (
               <ReviewList productId={product.id} reviews={reviews[product.id] || []} />
             )}

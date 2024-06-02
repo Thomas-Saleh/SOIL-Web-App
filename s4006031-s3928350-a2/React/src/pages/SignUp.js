@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { createUser } from '../data/repository';  
-import { useNavigate, Link } from 'react-router-dom';
+import { createUser } from '../data/repository';  // Import createUser function from repository
+import { useNavigate, Link } from 'react-router-dom'; // Import useNavigate for navigation and Link for routing
 
 function Signup() {
+  // State variables to manage user details and error messages
   const [userDetails, setUserDetails] = useState({
     username: '',
     email: '',
@@ -10,32 +11,35 @@ function Signup() {
     confirmPassword: '',
   });
   const [errorMessage, setErrorMessage] = useState('');
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Initialize navigate for redirecting users
 
+  // Handle input changes and update user details state
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserDetails({ ...userDetails, [name]: value });
   };
 
+  // Handle form submission for signup
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateForm()) {
       try {
-        const response = await createUser(userDetails);
+        const response = await createUser(userDetails); // Create user using userDetails
         if (response) {
           alert('Registration successful! Redirecting to the sign-in page.'); // Popup success message
           navigate('/sign-in'); // Redirect to the sign-in page immediately
         }
       } catch (error) {
         if (error.response?.status === 409) {
-          setErrorMessage('Email is already in use. Please try again.');
+          setErrorMessage('Email is already in use. Please try again.'); // Handle email conflict error
         } else {
-          setErrorMessage(error.response?.data?.message || 'Failed to register. Please try again.');
+          setErrorMessage(error.response?.data?.message || 'Failed to register. Please try again.'); // Handle other errors
         }
       }
     }
   };
 
+  // Validate form input
   const validateForm = () => {
     if (!userDetails.username || !userDetails.email || !userDetails.password) {
       setErrorMessage('All fields are required.');
@@ -65,6 +69,7 @@ function Signup() {
     return true;
   };
 
+  // Render signup form
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#F9E8D9]">
       <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
@@ -127,7 +132,7 @@ function Signup() {
           <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
             Already have an account? <Link to="/sign-in" className="text-[#EE7214] hover:underline dark:text-[#EE7214]">Sign In</Link>
           </div>
-          {errorMessage && <div className="text-red-500 text-sm">{errorMessage}</div>}
+          {errorMessage && <div className="text-red-500 text-sm">{errorMessage}</div>} {/* Display error message if any */}
         </form>
       </div>
     </div>
