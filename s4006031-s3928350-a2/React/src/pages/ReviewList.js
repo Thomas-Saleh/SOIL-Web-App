@@ -1,15 +1,17 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { getAllReviewsForProduct, deleteReview, followUser, unfollowUser } from '../data/repository';
-import ReviewForm from './ReviewForm';
-import { decodeJWT } from '../utils/jwtUtils';
-import StarRating from '../utils/StarRating';
+import { getAllReviewsForProduct, deleteReview, followUser, unfollowUser } from '../data/repository'; // Importing functions for review management
+import ReviewForm from './ReviewForm'; // Importing ReviewForm component
+import { decodeJWT } from '../utils/jwtUtils'; // Importing JWT decoding function
+import StarRating from '../utils/StarRating'; // Importing StarRating component
 
 function ReviewList({ productId }) {
+  // State variables to manage reviews, editing review, user ID, and user's review
   const [reviews, setReviews] = useState([]);
   const [editingReview, setEditingReview] = useState(null);
   const [userId, setUserId] = useState(null);
   const [userReview, setUserReview] = useState(null); // Store user's review
 
+  // Function to fetch reviews for the current product
   const fetchReviews = useCallback(async () => {
     try {
       const reviewsData = await getAllReviewsForProduct(productId);
@@ -30,10 +32,12 @@ function ReviewList({ productId }) {
     }
   }, [productId]);
 
+  // Effect to fetch reviews when component mounts or productId changes
   useEffect(() => {
     fetchReviews();
   }, [fetchReviews]);
 
+  // Function to handle deletion of a review
   const handleDelete = async (reviewId) => {
     try {
       await deleteReview(reviewId);
@@ -43,11 +47,13 @@ function ReviewList({ productId }) {
     }
   };
 
+  // Callback function to handle review addition or editing
   const handleReviewAdded = () => {
-    fetchReviews();
+    fetchReviews(); // Fetch reviews after addition or editing
     setEditingReview(null); // Reset the editingReview state after review is added/edited
   };
 
+  // Function to handle following a user
   const handleFollow = async (followingId) => {
     try {
       await followUser(userId, followingId);
@@ -57,6 +63,7 @@ function ReviewList({ productId }) {
     }
   };
 
+  // Function to handle unfollowing a user
   const handleUnfollow = async (followingId) => {
     try {
       await unfollowUser(userId, followingId);
@@ -74,7 +81,7 @@ function ReviewList({ productId }) {
       ) : (
         reviews.map((review) => (
           <div key={review.id} className="border border-gray-300 rounded p-2 mt-2">
-            <StarRating rating={review.star_rating} />
+            <StarRating rating={review.star_rating} /> {/* Display star rating component */}
             <p><strong>{review.user.username}</strong></p>
             <p>{review.review_text}</p>
             {review.user_id !== userId && (
